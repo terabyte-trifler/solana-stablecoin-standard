@@ -1,0 +1,13 @@
+[workspace]
+members = [
+    "programs/sss-token",
+    "programs/sss-transfer-hook",
+]
+resolver = "2"
+
+[workspace.dependencies]
+anchor-lang = { version = "0.31.1", features = ["init-if-needed"] }
+anchor-spl = "0.31.1"
+spl-transfer-hook-interface = "0.8"
+spl-tlv-account-resolution = "0.8"
+spl-pod = "0.4"

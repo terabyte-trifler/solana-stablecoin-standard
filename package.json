@@ -1,0 +1,8 @@
+{
+  "name": "solana-stablecoin-standard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/terabyte-trifler/solana-stablecoin-standard",
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT"
+}
