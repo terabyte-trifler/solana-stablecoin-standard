@@ -114,6 +114,33 @@ cp .env.example .env
 docker compose up
 ```
 
+### Frontends
+
+```bash
+# Web frontend (Vite + React)
+cd frontend
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
+# Open: http://127.0.0.1:5173/?cluster=localnet
+#        http://127.0.0.1:5173/               (devnet default)
+
+# Interactive terminal dashboard (Ink TUI)
+cd ../tui
+npm install
+npm run dev -- --config <STABLECOIN_CONFIG_PDA> --url localnet
+```
+
+Web frontend screens:
+- Connect (load config PDA)
+- Dashboard (supply, features, roles, authority, holder stats)
+- Mint/Burn panel
+- Holders table (search + sort)
+- Compliance panel (SSS-2 blacklist visibility)
+
+Current frontend write-path status:
+- The web app is production-friendly for read/query flows.
+- Write actions that require privileged signers (mint/burn/blacklist mutation) should be executed via CLI/backend until wallet-adapter signer support is added to the SDK write path.
+
 ## Installation
 
 ### Prerequisites
@@ -138,6 +165,12 @@ cd ../cli && npm install && npm run build && npm link
 
 # Build backend
 cd ../backend && npm install && npm run build
+
+# Build web frontend
+cd ../frontend && npm install && npm run build
+
+# Build TUI
+cd ../tui && npm install && npm run build
 ```
 
 ### Deploy
@@ -174,6 +207,8 @@ solana-stablecoin-standard/
 │   └── sss-transfer-hook/   # Transfer hook for blacklist enforcement
 ├── sdk/                     # @stbr/sss-token TypeScript SDK
 ├── cli/                     # sss-token CLI tool
+├── frontend/                # React/Vite operator web UI
+├── tui/                     # Ink-based terminal dashboard (sss-dashboard)
 ├── backend/                 # REST API + event indexer + Docker
 ├── tests/                   # Anchor integration tests (59 test cases)
 ├── trident-tests/           # Fuzz tests via Trident
