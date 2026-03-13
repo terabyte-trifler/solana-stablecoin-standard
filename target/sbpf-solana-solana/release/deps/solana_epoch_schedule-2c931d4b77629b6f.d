@@ -1,8 +1,0 @@
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/sbpf-solana-solana/release/deps/solana_epoch_schedule-2c931d4b77629b6f.d: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/sysvar.rs
-
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/sbpf-solana-solana/release/deps/libsolana_epoch_schedule-2c931d4b77629b6f.rlib: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/sysvar.rs
-
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/sbpf-solana-solana/release/deps/libsolana_epoch_schedule-2c931d4b77629b6f.rmeta: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/sysvar.rs
-
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/lib.rs:
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-epoch-schedule-2.2.1/src/sysvar.rs:

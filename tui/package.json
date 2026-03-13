@@ -1,0 +1,35 @@
+{
+  "name": "@stbr/sss-tui",
+  "version": "0.1.0",
+  "description": "Interactive terminal dashboard for Solana Stablecoin Standard",
+  "type": "module",
+  "bin": { "sss-dashboard": "./dist/index.js" },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --loader ts-node/esm src/index.tsx",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@solana/web3.js": "^1.95.0",
+    "@solana/spl-token": "^0.4.0",
+    "@stbr/sss-token": "file:../sdk",
+    "bn.js": "^5.2.1",
+    "ink": "^4.4.1",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^5.0.1",
+    "ink-select-input": "^5.0.0",
+    "ink-big-text": "^2.0.0",
+    "react": "^18.3.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.5",
+    "@types/react": "^18.3.0",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.4.0"
+  },
+  "license": "MIT"
+}

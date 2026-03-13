@@ -1,7 +1,0 @@
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/spl_associated_token_account_client-51343719dda07cc6.d: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/address.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/instruction.rs
-
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/libspl_associated_token_account_client-51343719dda07cc6.rmeta: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/address.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/instruction.rs
-
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/lib.rs:
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/address.rs:
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-associated-token-account-client-2.0.0/src/instruction.rs:

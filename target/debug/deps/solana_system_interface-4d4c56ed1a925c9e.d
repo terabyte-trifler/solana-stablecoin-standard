@@ -1,9 +1,0 @@
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/solana_system_interface-4d4c56ed1a925c9e.d: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/error.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/instruction.rs
-
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/libsolana_system_interface-4d4c56ed1a925c9e.rlib: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/error.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/instruction.rs
-
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/libsolana_system_interface-4d4c56ed1a925c9e.rmeta: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/error.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/instruction.rs
-
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/lib.rs:
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/error.rs:
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-system-interface-1.0.0/src/instruction.rs:

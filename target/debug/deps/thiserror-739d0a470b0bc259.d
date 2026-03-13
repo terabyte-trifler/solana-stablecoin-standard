@@ -1,7 +1,0 @@
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/thiserror-739d0a470b0bc259.d: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/aserror.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/display.rs
-
-/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/libthiserror-739d0a470b0bc259.rmeta: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/aserror.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/display.rs
-
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/lib.rs:
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/aserror.rs:
-/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-1.0.69/src/display.rs:
