@@ -1,0 +1,245 @@
+Streaming transaction logs mentioning 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j. Confirmed commitment
+Transaction executed in slot 77940:
+  Signature: 8JHWpx9v9yMH6KDYaJQ4NpdkhwuuT24hurPfE1EyHCwSmyVvwzNgzTZsX72mK3VeiCHc93dhFjWrmqi1WuULp9w
+  Status: Ok
+  Log Messages:
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
+    Program log: Instruction: InitHookAccounts
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [2]
+    Program log: Instruction: InitializeExtraAccountMetaList
+    Program 11111111111111111111111111111111 invoke [3]
+    Program 11111111111111111111111111111111 success
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 8087 of 193318 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program log: Transfer hook ExtraAccountMetaList initialized
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 15251 of 200000 compute units
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
+Transaction executed in slot 77958:
+  Signature: 4wfmfDvmrUiTJrWcf1ga1zaERDk8tFQRnhpcseABkuAvvkMcb37fbhgoCuRRKrkmDmx5BZnpoZnbBKGouXKQaryS
+  Status: Ok
+  Log Messages:
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
+    Program log: Instruction: TransferChecked
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [2]
+    Program log: === Transfer Hook Fallback Entry ===
+    Program log: Accounts received: 9
+    Program log: Execute instruction - amount: 500000
+    Program log: Account count OK: 9
+    Program log: Account count OK: 9
+    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
+    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
+    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
+    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
+    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Meta PDA validated
+    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Is seize operation (bypass): false
+    Program log: Checking blacklists...
+    Program log: Source blacklist data_len: 0
+    Program log: Dest blacklist data_len: 0
+    Program log: ✓ ALLOW: Both parties clear, transfer allowed
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28909 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54605 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
+Transaction executed in slot 77963:
+  Signature: 6325LaDsFpa8Qr1FkWSjSHnSzEvtukdd98NsTJ2DDUWV4JLv72bFju2TzZQwbHogw9iTqzwkBEsiWKYPwGxpABrC
+  Status: Ok
+  Log Messages:
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
+    Program log: Instruction: TransferChecked
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [2]
+    Program log: === Transfer Hook Fallback Entry ===
+    Program log: Accounts received: 9
+    Program log: Execute instruction - amount: 100
+    Program log: Account count OK: 9
+    Program log: Account count OK: 9
+    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
+    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
+    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
+    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
+    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Meta PDA validated
+    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Is seize operation (bypass): false
+    Program log: Checking blacklists...
+    Program log: Source blacklist data_len: 0
+    Program log: Dest blacklist data_len: 0
+    Program log: ✓ ALLOW: Both parties clear, transfer allowed
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28883 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54579 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
+Transaction executed in slot 77966:
+  Signature: 2XSHGMadN78f8qArmu4toRxrpcfKzRiFsE3whGBehg9GeCJJbh7Whm7hAj3UMdNR4NzVqXqeqRhsjpjSUb9KyRSa
+  Status: Ok
+  Log Messages:
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
+    Program log: Instruction: Seize
+    Program log: Adding 3 remaining accounts (config + blacklists)
+    Program log: Total additional accounts passed to Token-2022 helper: 6
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]
+    Program log: Instruction: TransferChecked
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [3]
+    Program log: === Transfer Hook Fallback Entry ===
+    Program log: Accounts received: 9
+    Program log: Execute instruction - amount: 2000000
+    Program log: Account count OK: 9
+    Program log: Account count OK: 9
+    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
+    Program log: Authority: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
+    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
+    Program log: Dest Blacklist: k42xY8buSdNVz4u8ne1e2okxmF1F5fJumAGkkuSAhhU
+    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Meta PDA validated
+    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Is seize operation (bypass): true
+    Program log: ✓ BYPASS: Permanent delegate seize operation detected
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27804 of 138474 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54870 of 164780 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
+    Program data: M4GDcs7qjHqB7zJXuPaDJp74EoiDx8Ll7w0XN0CzLqzkwoiU/CCwvvUA6tyM7O0txgieIHjMH4cYvurufieFmITItSpVjoPJuHmjLvjg8tjmjwPxWLAyTWjawateffRgFRkvxFDlvl0nACcPowmyJd5idPIo1bJ/+nWN/gJrmQrSRYVGF9/lwQgAwvgqbSo05KKm8dBOCi7vmmxVUWj10VMxte7RQfvcgIQeAAAAAABzmmoEgdLV2WUrMC7lCCLncLlpGDVSc02lHQajgQzFdBtYtGkAAAAA
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 91675 of 200000 compute units
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
+Transaction executed in slot 77968:
+  Signature: 1HqBLNFAnDQMYWPWzuVoH8SMwrJYtbTT1dUUcxeEj3EUMGfr3Rp6RsF14jKC4NxnXBRQXZYmEW25EthSrVfzwJJ
+  Status: Ok
+  Log Messages:
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
+    Program log: Instruction: Seize
+    Program log: Adding 3 remaining accounts (config + blacklists)
+    Program log: Total additional accounts passed to Token-2022 helper: 6
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]
+    Program log: Instruction: TransferChecked
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [3]
+    Program log: === Transfer Hook Fallback Entry ===
+    Program log: Accounts received: 9
+    Program log: Execute instruction - amount: 100
+    Program log: Account count OK: 9
+    Program log: Account count OK: 9
+    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
+    Program log: Authority: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
+    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
+    Program log: Dest Blacklist: k42xY8buSdNVz4u8ne1e2okxmF1F5fJumAGkkuSAhhU
+    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Meta PDA validated
+    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Is seize operation (bypass): true
+    Program log: ✓ BYPASS: Permanent delegate seize operation detected
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27769 of 138472 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54835 of 164778 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
+    Program data: M4GDcs7qjHqB7zJXuPaDJp74EoiDx8Ll7w0XN0CzLqzkwoiU/CCwvvUA6tyM7O0txgieIHjMH4cYvurufieFmITItSpVjoPJuHmjLvjg8tjmjwPxWLAyTWjawateffRgFRkvxFDlvl0nACcPowmyJd5idPIo1bJ/+nWN/gJrmQrSRYVGF9/lwQgAwvgqbSo05KKm8dBOCi7vmmxVUWj10VMxte7RQfvcZAAAAAAAAAAhDAi/U1+Bik8joJLtkPxk7bB38ug1RSm7iFtxz3x9Kx1YtGkAAAAA
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 91642 of 200000 compute units
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
+Transaction executed in slot 77971:
+  Signature: 5pN38HqapxNXxVMSAtXfGLvCv82z9YLppt8tqgPSvVSAcmdUr5pfaPxRj5WsLXtakmUq8dTC5LBxjcSvWWEF4ART
+  Status: Ok
+  Log Messages:
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
+    Program log: Instruction: TransferChecked
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [2]
+    Program log: === Transfer Hook Fallback Entry ===
+    Program log: Accounts received: 9
+    Program log: Execute instruction - amount: 3000000
+    Program log: Account count OK: 9
+    Program log: Account count OK: 9
+    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
+    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
+    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
+    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
+    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Meta PDA validated
+    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Is seize operation (bypass): false
+    Program log: Checking blacklists...
+    Program log: Source blacklist data_len: 0
+    Program log: Dest blacklist data_len: 0
+    Program log: ✓ ALLOW: Both parties clear, transfer allowed
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28918 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54614 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
+Transaction executed in slot 77973:
+  Signature: T4NS5jzfW57awiHuhMs2UWYmahM27yjV96VpBriNax3NMDPqpaEpCckD5Wcu8P7EtFEZGSfz53sswHhSd7i5XV3
+  Status: Ok
+  Log Messages:
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
+    Program log: Instruction: Seize
+    Program log: Adding 3 remaining accounts (config + blacklists)
+    Program log: Total additional accounts passed to Token-2022 helper: 6
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [2]
+    Program log: Instruction: TransferChecked
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [3]
+    Program log: === Transfer Hook Fallback Entry ===
+    Program log: Accounts received: 9
+    Program log: Execute instruction - amount: 20499800
+    Program log: Account count OK: 9
+    Program log: Account count OK: 9
+    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
+    Program log: Authority: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
+    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
+    Program log: Dest Blacklist: k42xY8buSdNVz4u8ne1e2okxmF1F5fJumAGkkuSAhhU
+    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Meta PDA validated
+    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Is seize operation (bypass): true
+    Program log: ✓ BYPASS: Permanent delegate seize operation detected
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27808 of 138474 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54874 of 164780 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
+    Program data: M4GDcs7qjHqB7zJXuPaDJp74EoiDx8Ll7w0XN0CzLqzkwoiU/CCwvvUA6tyM7O0txgieIHjMH4cYvurufieFmITItSpVjoPJuHmjLvjg8tjmjwPxWLAyTWjawateffRgFRkvxFDlvl0nACcPowmyJd5idPIo1bJ/+nWN/gJrmQrSRYVGF9/lwQgAwvgqbSo05KKm8dBOCi7vmmxVUWj10VMxte7RQfvcWM04AQAAAABzmmoEgdLV2WUrMC7lCCLncLlpGDVSc02lHQajgQzFdCJYtGkAAAAA
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 91679 of 200000 compute units
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
+Transaction executed in slot 77976:
+  Signature: eb49eHjpAHiSppAXAC2qX1eZWfwe7PfGTwrhL1Ri2veHeYLNVmuHFDmUPV5t7bLfWmfvVoQu2yvX4S86DX8qGSG
+  Status: Ok
+  Log Messages:
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
+    Program log: Instruction: TransferChecked
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j invoke [2]
+    Program log: === Transfer Hook Fallback Entry ===
+    Program log: Accounts received: 9
+    Program log: Execute instruction - amount: 100000
+    Program log: Account count OK: 9
+    Program log: Account count OK: 9
+    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
+    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
+    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
+    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
+    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Meta PDA validated
+    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Is seize operation (bypass): false
+    Program log: Checking blacklists...
+    Program log: Source blacklist data_len: 0
+    Program log: Dest blacklist data_len: 0
+    Program log: ✓ ALLOW: Both parties clear, transfer allowed
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28909 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54605 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success

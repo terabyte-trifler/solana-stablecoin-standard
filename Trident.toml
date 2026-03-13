@@ -1,0 +1,37 @@
+# Trident.toml — Fuzz testing configuration
+#
+# Run: trident fuzz run-hfuzz fuzz_0
+# Debug: trident fuzz run-debug fuzz_0 <crash_file>
+
+[fuzz]
+# Fuzzing iterations before stopping (0 = infinite until Ctrl+C)
+fuzzing_with_stats = true
+
+[honggfuzz]
+# Max iterations (0 = no limit)
+iterations = 10000
+# Number of threads (0 = auto-detect CPU cores)
+threads = 0
+# Stop on first crash
+exit_upon_crash = true
+# Print program logs for debugging
+keep_output = false
+verbose = false
+# Timeout per iteration (seconds)
+timeout = 30
+
+[test]
+# Programs to deploy for fuzz testing
+# These are loaded from target/deploy/ or trident-genesis/
+[[test.programs]]
+address = "SSS1TokenXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+program = "target/deploy/sss_token.so"
+
+[[test.programs]]
+address = "SSSHookXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+program = "target/deploy/sss_transfer_hook.so"
+
+# Third-party programs needed for CPI
+[[test.programs]]
+address = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+program = "trident-genesis/token-2022.so"
