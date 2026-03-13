@@ -147,8 +147,7 @@ pub fn handler(
 
     // ── Step 1: Calculate mint account size ──────────────────────
     // Token-2022 mints have variable size depending on extensions.
-    // We use the spl_token_2022 function to compute the exact space.
-
+    
     let mut extension_types = vec![
         // All presets get metadata
         spl_token_2022::extension::ExtensionType::MetadataPointer,
@@ -164,31 +163,21 @@ pub fn handler(
         extension_types.push(spl_token_2022::extension::ExtensionType::DefaultAccountState);
     }
 
-    // Calculate space for mint + all extensions
+    // Calculate space for mint + all extensions (but NOT metadata yet)
     let mint_space =
         spl_token_2022::extension::ExtensionType::try_calculate_account_len::<
             spl_token_2022::state::Mint,
         >(&extension_types)
         .map_err(|_| SSSError::MathOverflow)?;
 
-    // Add space for token metadata (variable-length: name + symbol + uri)
-    // TokenMetadata uses TLV encoding: 4 (type) + 4 (length) + data
-    let metadata_space = spl_token_metadata_interface::state::TokenMetadata {
-        name: name.clone(),
-        symbol: symbol.clone(),
-        uri: uri.clone(),
-        ..Default::default()
-    };
-    let total_mint_space =
-        mint_space + spl_type_length_value::variable_len_pack::VariableLenPack::get_packed_len(
-            &metadata_space,
-        ).map_err(|_| SSSError::MathOverflow)?;
-
     let rent = &ctx.accounts.rent;
-    let mint_rent = rent.minimum_balance(total_mint_space);
-
     let mint_key = ctx.accounts.mint.key();
     let config_key = ctx.accounts.stablecoin_config.key();
+
+    // InitializeMint2 requires the mint account to be EXACTLY the size for
+    // mint + extensions (NOT including metadata TLV yet).
+    // The metadata initialization will reallocate the account later.
+    let mint_rent = rent.minimum_balance(mint_space);
 
     // ── Step 2: Create the mint account ──────────────────────────
     // We allocate space owned by the Token-2022 program.
@@ -198,7 +187,7 @@ pub fn handler(
             &ctx.accounts.payer.key(),
             &mint_key,
             mint_rent,
-            total_mint_space as u64,
+            mint_space as u64,
             &ctx.accounts.token_program.key(),
         ),
         &[
@@ -305,6 +294,47 @@ pub fn handler(
     // ── Step 5: Initialize Token Metadata ────────────────────────
     // Write name/symbol/uri into the mint's metadata extension.
     // The config PDA signs as the metadata update authority.
+    //
+    // IMPORTANT: The metadata initialization will reallocate the mint account
+    // to fit the variable-length TLV data. We need to ensure the mint has
+    // enough lamports to remain rent-exempt after reallocation.
+
+    let metadata = spl_token_metadata_interface::state::TokenMetadata {
+        update_authority: spl_pod::optional_keys::OptionalNonZeroPubkey::try_from(Some(config_key))
+            .map_err(|_| SSSError::MathOverflow)?,
+        mint: mint_key,
+        name: name.clone(),
+        symbol: symbol.clone(),
+        uri: uri.clone(),
+        additional_metadata: vec![],
+    };
+    
+    let metadata_len = metadata.tlv_size_of()
+        .map_err(|_| SSSError::MathOverflow)?;
+    
+    let total_mint_space = mint_space
+        .checked_add(metadata_len)
+        .ok_or(SSSError::MathOverflow)?;
+    
+    let required_lamports = rent.minimum_balance(total_mint_space);
+    let current_lamports = ctx.accounts.mint.to_account_info().lamports();
+    
+    // Top up the mint account if needed
+    if required_lamports > current_lamports {
+        invoke_signed(
+            &system_instruction::transfer(
+                &ctx.accounts.payer.key(),
+                &mint_key,
+                required_lamports - current_lamports,
+            ),
+            &[
+                ctx.accounts.payer.to_account_info(),
+                ctx.accounts.mint.to_account_info(),
+                ctx.accounts.system_program.to_account_info(),
+            ],
+            &[],
+        )?;
+    }
 
     let config_bump = ctx.bumps.stablecoin_config;
     let signer_seeds: &[&[u8]] = &[

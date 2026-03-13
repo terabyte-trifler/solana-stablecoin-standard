@@ -12,8 +12,8 @@ members = [
 ]
 
 [programs.localnet]
-sss_token = "sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk"
-sss_transfer_hook = "8hCc8wEKWuSVqQLo5HKwEYuJVR7GaQTxcXw8he38ZVUK"
+sss_token = "A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q"
+sss_transfer_hook = "8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j"
 
 [programs.devnet]
 sss_token = "sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk"

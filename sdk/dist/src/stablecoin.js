@@ -26,6 +26,9 @@
 // │    // Load existing                                              │
 // │    const loaded = await SolanaStablecoin.load(conn, configPda); │
 // └──────────────────────────────────────────────────────────────────┘
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SolanaStablecoin = void 0;
 const web3_js_1 = require("@solana/web3.js");
@@ -35,6 +38,7 @@ const types_1 = require("./types");
 const presets_1 = require("./presets");
 const pda_1 = require("./pda");
 const compliance_1 = require("./compliance");
+const sss_token_json_1 = __importDefault(require("../idl/sss_token.json"));
 /**
  * The main SDK class for interacting with a Solana Stablecoin Standard instance.
  *
@@ -111,38 +115,39 @@ class SolanaStablecoin {
         const [roleManagerPda] = (0, pda_1.findRoleManagerPda)(configPda);
         // Build provider and program
         const provider = new anchor_1.AnchorProvider(connection, new anchor_1.Wallet(opts.authority), anchor_1.AnchorProvider.defaultOptions());
-        const program = new anchor_1.Program(require("../idl/sss_token.json"), provider);
+        const program = new anchor_1.Program(sss_token_json_1.default, provider);
         // ── Transaction 1: Initialize ──────────────────────────────
         const initTx = await program.methods
             .initialize(opts.name, opts.symbol, uri, decimals, features.enablePermanentDelegate, features.enableTransferHook, features.defaultAccountFrozen)
             .accounts({
             payer: opts.authority.publicKey,
             mint: mint,
-            stablecoin_config: configPda,
-            role_manager: roleManagerPda,
-            token_program: pda_1.TOKEN_2022_PROGRAM_ID,
-            system_program: web3_js_1.SystemProgram.programId,
+            stablecoinConfig: configPda,
+            roleManager: roleManagerPda,
+            tokenProgram: pda_1.TOKEN_2022_PROGRAM_ID,
+            systemProgram: web3_js_1.SystemProgram.programId,
             rent: web3_js_1.SYSVAR_RENT_PUBKEY,
         })
             .signers([opts.authority, mintKeypair])
             .rpc();
-        console.log(`Initialize tx: ${initTx}`);
+        // Wait for transaction confirmation to ensure account is readable
+        await connection.confirmTransaction(initTx, "confirmed");
+        await new Promise((resolve) => setTimeout(resolve, 500));
         // ── Transaction 2: Init hook accounts (SSS-2 only) ─────────
         if (features.enableTransferHook) {
             const [extraMetaListPda] = (0, pda_1.findExtraAccountMetaListPda)(mint);
-            const hookTx = await program.methods
-                .init_hook_accounts()
+            await program.methods
+                .initHookAccounts()
                 .accounts({
                 payer: opts.authority.publicKey,
-                stablecoin_config: configPda,
+                stablecoinConfig: configPda,
                 mint: mint,
-                extra_account_meta_list: extraMetaListPda,
-                hook_program: pda_1.SSS_TRANSFER_HOOK_PROGRAM_ID,
-                system_program: web3_js_1.SystemProgram.programId,
+                extraAccountMetaList: extraMetaListPda,
+                hookProgram: pda_1.SSS_TRANSFER_HOOK_PROGRAM_ID,
+                systemProgram: web3_js_1.SystemProgram.programId,
             })
                 .signers([opts.authority])
                 .rpc();
-            console.log(`Init hook accounts tx: ${hookTx}`);
         }
         const isCompliant = features.enablePermanentDelegate && features.enableTransferHook;
         return new SolanaStablecoin(connection, program, configPda, mint, roleManagerPda, isCompliant);
@@ -161,10 +166,21 @@ class SolanaStablecoin {
      * @param wallet - Optional wallet for signing (defaults to read-only)
      */
     static async load(connection, configPda, wallet) {
-        const provider = new anchor_1.AnchorProvider(connection, wallet ? new anchor_1.Wallet(wallet) : anchor_1.AnchorProvider.local().wallet, anchor_1.AnchorProvider.defaultOptions());
-        const program = new anchor_1.Program(require("../idl/sss_token.json"), provider);
+        // Create a lightweight read-only wallet for cases where no wallet is provided
+        // This allows read operations without requiring ANCHOR_WALLET env var
+        const readOnlyWallet = {
+            publicKey: wallet?.publicKey ?? web3_js_1.Keypair.generate().publicKey,
+            async signTransaction(tx) {
+                return tx;
+            },
+            async signAllTransactions(txs) {
+                return txs;
+            },
+        };
+        const provider = new anchor_1.AnchorProvider(connection, wallet ? new anchor_1.Wallet(wallet) : readOnlyWallet, anchor_1.AnchorProvider.defaultOptions());
+        const program = new anchor_1.Program(sss_token_json_1.default, provider);
         // Fetch config from chain
-        const config = await program.account.stablecoin_config.fetch(configPda);
+        const config = await program.account.stablecoinConfig.fetch(configPda);
         const mint = config.mint;
         const [roleManagerPda] = (0, pda_1.findRoleManagerPda)(configPda);
         const isCompliant = config.enablePermanentDelegate &&
@@ -189,14 +205,14 @@ class SolanaStablecoin {
         // Check if the ATA exists; if not, prepend create instruction
         const ataInfo = await this.connection.getAccountInfo(recipientAta);
         const builder = this.program.methods
-            .mint_tokens(params.amount)
+            .mintTokens(params.amount)
             .accounts({
             authority: params.minter.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
             mint: this.mint,
-            recipient_token_account: recipientAta,
-            token_program: pda_1.TOKEN_2022_PROGRAM_ID,
+            recipientTokenAccount: recipientAta,
+            tokenProgram: pda_1.TOKEN_2022_PROGRAM_ID,
         })
             .signers([params.minter]);
         if (!ataInfo) {
@@ -218,14 +234,14 @@ class SolanaStablecoin {
         const tokenAccount = params.tokenAccount ??
             (0, spl_token_1.getAssociatedTokenAddressSync)(this.mint, params.burner.publicKey, true, pda_1.TOKEN_2022_PROGRAM_ID);
         return this.program.methods
-            .burn_tokens(params.amount)
+            .burnTokens(params.amount)
             .accounts({
             authority: params.burner.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
             mint: this.mint,
-            token_account: tokenAccount,
-            token_program: pda_1.TOKEN_2022_PROGRAM_ID,
+            tokenAccount: tokenAccount,
+            tokenProgram: pda_1.TOKEN_2022_PROGRAM_ID,
         })
             .signers([params.burner])
             .rpc();
@@ -239,13 +255,13 @@ class SolanaStablecoin {
      */
     async freezeAccount(tokenAccount, authority) {
         return this.program.methods
-            .freeze_account()
+            .freezeAccount()
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
+            stablecoinConfig: this.configPda,
             mint: this.mint,
-            token_account: tokenAccount,
-            token_program: pda_1.TOKEN_2022_PROGRAM_ID,
+            tokenAccount: tokenAccount,
+            tokenProgram: pda_1.TOKEN_2022_PROGRAM_ID,
         })
             .signers([authority])
             .rpc();
@@ -256,13 +272,13 @@ class SolanaStablecoin {
      */
     async thawAccount(tokenAccount, authority) {
         return this.program.methods
-            .thaw_account()
+            .thawAccount()
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
+            stablecoinConfig: this.configPda,
             mint: this.mint,
-            token_account: tokenAccount,
-            token_program: pda_1.TOKEN_2022_PROGRAM_ID,
+            tokenAccount: tokenAccount,
+            tokenProgram: pda_1.TOKEN_2022_PROGRAM_ID,
         })
             .signers([authority])
             .rpc();
@@ -276,8 +292,8 @@ class SolanaStablecoin {
             .pause()
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
         })
             .signers([authority])
             .rpc();
@@ -290,7 +306,7 @@ class SolanaStablecoin {
             .unpause()
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
+            stablecoinConfig: this.configPda,
         })
             .signers([authority])
             .rpc();
@@ -308,11 +324,11 @@ class SolanaStablecoin {
      */
     async addMinter(minter, quota, authority) {
         return this.program.methods
-            .add_minter(minter, quota)
+            .addMinter(minter, quota)
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
         })
             .signers([authority])
             .rpc();
@@ -322,11 +338,11 @@ class SolanaStablecoin {
      */
     async removeMinter(minter, authority) {
         return this.program.methods
-            .remove_minter(minter)
+            .removeMinter(minter)
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
         })
             .signers([authority])
             .rpc();
@@ -336,11 +352,11 @@ class SolanaStablecoin {
      */
     async updateMinterQuota(minter, newQuota, authority) {
         return this.program.methods
-            .update_minter_quota(minter, newQuota)
+            .updateMinterQuota(minter, newQuota)
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
         })
             .signers([authority])
             .rpc();
@@ -356,11 +372,11 @@ class SolanaStablecoin {
     async grantRole(role, grantee, authority) {
         const roleArg = this._toOnChainRoleType(role);
         return this.program.methods
-            .grant_role(roleArg, grantee)
+            .grantRole(roleArg, grantee)
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
         })
             .signers([authority])
             .rpc();
@@ -371,11 +387,11 @@ class SolanaStablecoin {
     async revokeRole(role, revokee, authority) {
         const roleArg = this._toOnChainRoleType(role);
         return this.program.methods
-            .revoke_role(roleArg, revokee)
+            .revokeRole(roleArg, revokee)
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
-            role_manager: this.roleManagerPda,
+            stablecoinConfig: this.configPda,
+            roleManager: this.roleManagerPda,
         })
             .signers([authority])
             .rpc();
@@ -389,10 +405,10 @@ class SolanaStablecoin {
      */
     async transferAuthority(newAuthority, currentAuthority) {
         return this.program.methods
-            .transfer_authority(newAuthority)
+            .transferAuthority(newAuthority)
             .accounts({
             authority: currentAuthority.publicKey,
-            stablecoin_config: this.configPda,
+            stablecoinConfig: this.configPda,
         })
             .signers([currentAuthority])
             .rpc();
@@ -403,10 +419,10 @@ class SolanaStablecoin {
      */
     async acceptAuthority(newAuthority) {
         return this.program.methods
-            .accept_authority()
+            .acceptAuthority()
             .accounts({
-            new_authority: newAuthority.publicKey,
-            stablecoin_config: this.configPda,
+            newAuthority: newAuthority.publicKey,
+            stablecoinConfig: this.configPda,
         })
             .signers([newAuthority])
             .rpc();
@@ -417,10 +433,10 @@ class SolanaStablecoin {
      */
     async cancelAuthorityTransfer(authority) {
         return this.program.methods
-            .cancel_authority_transfer()
+            .cancelAuthorityTransfer()
             .accounts({
             authority: authority.publicKey,
-            stablecoin_config: this.configPda,
+            stablecoinConfig: this.configPda,
         })
             .signers([authority])
             .rpc();
@@ -441,7 +457,7 @@ class SolanaStablecoin {
      * Caches the result; call `refreshConfig()` to force re-fetch.
      */
     async getConfig() {
-        const raw = await this.program.account.stablecoin_config.fetch(this.configPda);
+        const raw = await this.program.account.stablecoinConfig.fetch(this.configPda);
         this._cachedConfig = this._parseConfig(raw);
         return this._cachedConfig;
     }
@@ -454,7 +470,7 @@ class SolanaStablecoin {
      * Fetch and parse the RoleManager account.
      */
     async getRoles() {
-        const raw = await this.program.account.role_manager.fetch(this.roleManagerPda);
+        const raw = await this.program.account.roleManager.fetch(this.roleManagerPda);
         return this._parseRoles(raw);
     }
     /**

@@ -63,8 +63,9 @@ import {
 } from "./pda";
 import { ComplianceModule } from "./compliance";
 
-// Import the generated IDL type from Anchor build
+// Import the generated IDL type and JSON from Anchor build
 import type { SssToken } from "../idl/sss_token";
+import IDL from "../idl/sss_token.json";
 
 // The Anchor program type with proper typing
 type SssTokenProgram = Program<SssToken>;
@@ -188,10 +189,7 @@ export class SolanaStablecoin {
       new Wallet(opts.authority),
       AnchorProvider.defaultOptions(),
     );
-    const program = new Program(
-      require("../idl/sss_token.json"),
-      provider,
-    ) as SssTokenProgram;
+    const program = new Program(IDL as any, provider) as SssTokenProgram;
 
     // ── Transaction 1: Initialize ──────────────────────────────
     const initTx = await program.methods
@@ -207,35 +205,35 @@ export class SolanaStablecoin {
       .accounts({
         payer: opts.authority.publicKey,
         mint: mint,
-        stablecoin_config: configPda,
-        role_manager: roleManagerPda,
-        token_program: TOKEN_2022_PROGRAM_ID,
-        system_program: SystemProgram.programId,
+        stablecoinConfig: configPda,
+        roleManager: roleManagerPda,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
         rent: SYSVAR_RENT_PUBKEY,
-      })
+      } as any)
       .signers([opts.authority, mintKeypair])
       .rpc();
 
-    console.log(`Initialize tx: ${initTx}`);
+    // Wait for transaction confirmation to ensure account is readable
+    await connection.confirmTransaction(initTx, "confirmed");
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     // ── Transaction 2: Init hook accounts (SSS-2 only) ─────────
     if (features.enableTransferHook) {
       const [extraMetaListPda] = findExtraAccountMetaListPda(mint);
 
-      const hookTx = await program.methods
-        .init_hook_accounts()
+      await (program.methods as any)
+        .initHookAccounts()
         .accounts({
           payer: opts.authority.publicKey,
-          stablecoin_config: configPda,
+          stablecoinConfig: configPda,
           mint: mint,
-          extra_account_meta_list: extraMetaListPda,
-          hook_program: SSS_TRANSFER_HOOK_PROGRAM_ID,
-          system_program: SystemProgram.programId,
-        })
+          extraAccountMetaList: extraMetaListPda,
+          hookProgram: SSS_TRANSFER_HOOK_PROGRAM_ID,
+          systemProgram: SystemProgram.programId,
+        } as any)
         .signers([opts.authority])
         .rpc();
-
-      console.log(`Init hook accounts tx: ${hookTx}`);
     }
 
     const isCompliant =
@@ -270,18 +268,27 @@ export class SolanaStablecoin {
     configPda: PublicKey,
     wallet?: Keypair,
   ): Promise<SolanaStablecoin> {
+    // Create a lightweight read-only wallet for cases where no wallet is provided
+    // This allows read operations without requiring ANCHOR_WALLET env var
+    const readOnlyWallet = {
+      publicKey: wallet?.publicKey ?? Keypair.generate().publicKey,
+      async signTransaction<T>(tx: T): Promise<T> {
+        return tx;
+      },
+      async signAllTransactions<T>(txs: T[]): Promise<T[]> {
+        return txs;
+      },
+    };
+
     const provider = new AnchorProvider(
       connection,
-      wallet ? new Wallet(wallet) : (AnchorProvider.local().wallet as any),
+      wallet ? new Wallet(wallet) : (readOnlyWallet as any),
       AnchorProvider.defaultOptions(),
     );
-    const program = new Program(
-      require("../idl/sss_token.json"),
-      provider,
-    ) as SssTokenProgram;
+    const program = new Program(IDL as any, provider) as SssTokenProgram;
 
     // Fetch config from chain
-    const config = await (program.account as any).stablecoin_config.fetch(
+    const config = await (program.account as any).stablecoinConfig.fetch(
       configPda,
     );
     const mint = config.mint as PublicKey;
@@ -326,16 +333,16 @@ export class SolanaStablecoin {
     // Check if the ATA exists; if not, prepend create instruction
     const ataInfo = await this.connection.getAccountInfo(recipientAta);
 
-    const builder = this.program.methods
-      .mint_tokens(params.amount)
+    const builder = (this.program.methods as any)
+      .mintTokens(params.amount)
       .accounts({
         authority: params.minter.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
         mint: this.mint,
-        recipient_token_account: recipientAta,
-        token_program: TOKEN_2022_PROGRAM_ID,
-      })
+        recipientTokenAccount: recipientAta,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+      } as any)
       .signers([params.minter]);
 
     if (!ataInfo) {
@@ -369,16 +376,16 @@ export class SolanaStablecoin {
         TOKEN_2022_PROGRAM_ID,
       );
 
-    return this.program.methods
-      .burn_tokens(params.amount)
+    return (this.program.methods as any)
+      .burnTokens(params.amount)
       .accounts({
         authority: params.burner.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
         mint: this.mint,
-        token_account: tokenAccount,
-        token_program: TOKEN_2022_PROGRAM_ID,
-      })
+        tokenAccount: tokenAccount,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+      } as any)
       .signers([params.burner])
       .rpc();
   }
@@ -394,15 +401,15 @@ export class SolanaStablecoin {
     tokenAccount: PublicKey,
     authority: Keypair,
   ): Promise<TransactionSignature> {
-    return this.program.methods
-      .freeze_account()
+    return (this.program.methods as any)
+      .freezeAccount()
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
+        stablecoinConfig: this.configPda,
         mint: this.mint,
-        token_account: tokenAccount,
-        token_program: TOKEN_2022_PROGRAM_ID,
-      })
+        tokenAccount: tokenAccount,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -415,15 +422,15 @@ export class SolanaStablecoin {
     tokenAccount: PublicKey,
     authority: Keypair,
   ): Promise<TransactionSignature> {
-    return this.program.methods
-      .thaw_account()
+    return (this.program.methods as any)
+      .thawAccount()
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
+        stablecoinConfig: this.configPda,
         mint: this.mint,
-        token_account: tokenAccount,
-        token_program: TOKEN_2022_PROGRAM_ID,
-      })
+        tokenAccount: tokenAccount,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -433,13 +440,13 @@ export class SolanaStablecoin {
    * Signer must be master authority or registered pauser.
    */
   async pause(authority: Keypair): Promise<TransactionSignature> {
-    return this.program.methods
+    return (this.program.methods as any)
       .pause()
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-      })
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -448,12 +455,12 @@ export class SolanaStablecoin {
    * Unpause operations. Master authority ONLY.
    */
   async unpause(authority: Keypair): Promise<TransactionSignature> {
-    return this.program.methods
+    return (this.program.methods as any)
       .unpause()
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-      })
+        stablecoinConfig: this.configPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -475,13 +482,13 @@ export class SolanaStablecoin {
     quota: BN,
     authority: Keypair,
   ): Promise<TransactionSignature> {
-    return this.program.methods
-      .add_minter(minter, quota)
+    return (this.program.methods as any)
+      .addMinter(minter, quota)
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-      })
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -493,13 +500,13 @@ export class SolanaStablecoin {
     minter: PublicKey,
     authority: Keypair,
   ): Promise<TransactionSignature> {
-    return this.program.methods
-      .remove_minter(minter)
+    return (this.program.methods as any)
+      .removeMinter(minter)
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-      })
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -512,13 +519,13 @@ export class SolanaStablecoin {
     newQuota: BN,
     authority: Keypair,
   ): Promise<TransactionSignature> {
-    return this.program.methods
-      .update_minter_quota(minter, newQuota)
+    return (this.program.methods as any)
+      .updateMinterQuota(minter, newQuota)
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-      })
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -538,13 +545,13 @@ export class SolanaStablecoin {
     authority: Keypair,
   ): Promise<TransactionSignature> {
     const roleArg = this._toOnChainRoleType(role);
-    return this.program.methods
-      .grant_role(roleArg, grantee)
+    return (this.program.methods as any)
+      .grantRole(roleArg, grantee)
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-      })
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -558,13 +565,13 @@ export class SolanaStablecoin {
     authority: Keypair,
   ): Promise<TransactionSignature> {
     const roleArg = this._toOnChainRoleType(role);
-    return this.program.methods
-      .revoke_role(roleArg, revokee)
+    return (this.program.methods as any)
+      .revokeRole(roleArg, revokee)
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-      })
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -581,12 +588,12 @@ export class SolanaStablecoin {
     newAuthority: PublicKey,
     currentAuthority: Keypair,
   ): Promise<TransactionSignature> {
-    return this.program.methods
-      .transfer_authority(newAuthority)
+    return (this.program.methods as any)
+      .transferAuthority(newAuthority)
       .accounts({
         authority: currentAuthority.publicKey,
-        stablecoin_config: this.configPda,
-      })
+        stablecoinConfig: this.configPda,
+      } as any)
       .signers([currentAuthority])
       .rpc();
   }
@@ -596,12 +603,12 @@ export class SolanaStablecoin {
    * The new authority signs.
    */
   async acceptAuthority(newAuthority: Keypair): Promise<TransactionSignature> {
-    return this.program.methods
-      .accept_authority()
+    return (this.program.methods as any)
+      .acceptAuthority()
       .accounts({
-        new_authority: newAuthority.publicKey,
-        stablecoin_config: this.configPda,
-      })
+        newAuthority: newAuthority.publicKey,
+        stablecoinConfig: this.configPda,
+      } as any)
       .signers([newAuthority])
       .rpc();
   }
@@ -613,12 +620,12 @@ export class SolanaStablecoin {
   async cancelAuthorityTransfer(
     authority: Keypair,
   ): Promise<TransactionSignature> {
-    return this.program.methods
-      .cancel_authority_transfer()
+    return (this.program.methods as any)
+      .cancelAuthorityTransfer()
       .accounts({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-      })
+        stablecoinConfig: this.configPda,
+      } as any)
       .signers([authority])
       .rpc();
   }
@@ -641,7 +648,7 @@ export class SolanaStablecoin {
    * Caches the result; call `refreshConfig()` to force re-fetch.
    */
   async getConfig(): Promise<StablecoinConfigAccount> {
-    const raw = await (this.program.account as any).stablecoin_config.fetch(
+    const raw = await (this.program.account as any).stablecoinConfig.fetch(
       this.configPda,
     );
     this._cachedConfig = this._parseConfig(raw);
@@ -658,7 +665,7 @@ export class SolanaStablecoin {
    * Fetch and parse the RoleManager account.
    */
   async getRoles(): Promise<RoleManagerAccount> {
-    const raw = await (this.program.account as any).role_manager.fetch(
+    const raw = await (this.program.account as any).roleManager.fetch(
       this.roleManagerPda,
     );
     return this._parseRoles(raw);

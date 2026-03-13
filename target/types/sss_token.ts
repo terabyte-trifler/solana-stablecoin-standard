@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/sss_token.json`.
  */
 export type SssToken = {
-  "address": "sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk",
+  "address": "A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q",
   "metadata": {
     "name": "sssToken",
     "version": "0.1.0",
@@ -1296,8 +1296,7 @@ export type SssToken = {
         {
           "name": "sourceTokenAccount",
           "docs": [
-            "The token account to seize FROM. Can be any account for this mint.",
-            "The permanent delegate (config PDA) overrides ownership."
+            "The token account to seize FROM."
           ],
           "writable": true
         },
@@ -1310,6 +1309,24 @@ export type SssToken = {
         },
         {
           "name": "tokenProgram"
+        },
+        {
+          "name": "extraAccountMetaList",
+          "docs": [
+            "Passed explicitly so Anchor doesn't filter it out."
+          ]
+        },
+        {
+          "name": "transferHookProgram",
+          "docs": [
+            "Passed explicitly so Anchor doesn't filter it out."
+          ]
+        },
+        {
+          "name": "sssTokenProgram",
+          "docs": [
+            "Passed explicitly so Anchor doesn't filter it out."
+          ]
         }
       ],
       "args": [

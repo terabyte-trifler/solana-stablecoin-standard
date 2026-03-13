@@ -40,8 +40,7 @@ pub const EXTRA_ACCOUNT_METAS_SEED: &[u8] = b"extra-account-metas";
 /// The program ID of the sss-transfer-hook program.
 /// Used when initializing the TransferHook extension on the mint.
 pub const TRANSFER_HOOK_PROGRAM_ID: anchor_lang::prelude::Pubkey =
-    anchor_lang::pubkey!("8hCc8wEKWuSVqQLo5HKwEYuJVR7GaQTxcXw8he38ZVUK");
-
+    anchor_lang::pubkey!("8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j");
 
 // ============================================================================
 // STRING FIELD MAX LENGTHS (in bytes, NOT characters)

@@ -12,7 +12,7 @@
 //     findStablecoinConfigPda,
 //   } from "@stbr/sss-token";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RoleType = exports.TOKEN_2022_PROGRAM_ID = exports.SSS_TRANSFER_HOOK_PROGRAM_ID = exports.SSS_TOKEN_PROGRAM_ID = exports.findAta = exports.findExtraAccountMetaListPda = exports.findBlacklistEntryPda = exports.findRoleManagerPda = exports.findStablecoinConfigPda = exports.getPresetLabel = exports.resolveFeatures = exports.Presets = exports.ComplianceModule = exports.SolanaStablecoin = void 0;
+exports.RoleType = exports.TOKEN_2022_PROGRAM_ID = exports.SSS_TRANSFER_HOOK_PROGRAM_ID = exports.SSS_TOKEN_PROGRAM_ID = exports.resolveTransferHookAccounts = exports.findAta = exports.findExtraAccountMetaListPda = exports.findBlacklistEntryPda = exports.findRoleManagerPda = exports.findStablecoinConfigPda = exports.getPresetLabel = exports.resolveFeatures = exports.Presets = exports.ComplianceModule = exports.SolanaStablecoin = void 0;
 // ── Primary class ────────────────────────────────────────────────
 var stablecoin_1 = require("./stablecoin");
 Object.defineProperty(exports, "SolanaStablecoin", { enumerable: true, get: function () { return stablecoin_1.SolanaStablecoin; } });
@@ -31,6 +31,7 @@ Object.defineProperty(exports, "findRoleManagerPda", { enumerable: true, get: fu
 Object.defineProperty(exports, "findBlacklistEntryPda", { enumerable: true, get: function () { return pda_1.findBlacklistEntryPda; } });
 Object.defineProperty(exports, "findExtraAccountMetaListPda", { enumerable: true, get: function () { return pda_1.findExtraAccountMetaListPda; } });
 Object.defineProperty(exports, "findAta", { enumerable: true, get: function () { return pda_1.findAta; } });
+Object.defineProperty(exports, "resolveTransferHookAccounts", { enumerable: true, get: function () { return pda_1.resolveTransferHookAccounts; } });
 Object.defineProperty(exports, "SSS_TOKEN_PROGRAM_ID", { enumerable: true, get: function () { return pda_1.SSS_TOKEN_PROGRAM_ID; } });
 Object.defineProperty(exports, "SSS_TRANSFER_HOOK_PROGRAM_ID", { enumerable: true, get: function () { return pda_1.SSS_TRANSFER_HOOK_PROGRAM_ID; } });
 Object.defineProperty(exports, "TOKEN_2022_PROGRAM_ID", { enumerable: true, get: function () { return pda_1.TOKEN_2022_PROGRAM_ID; } });

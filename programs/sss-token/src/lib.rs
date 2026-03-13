@@ -38,7 +38,7 @@ pub use errors::*;
 pub use state::*;
 pub use instructions::*;
 
-declare_id!("sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk");
+declare_id!("A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q");
 
 #[program]
 pub mod sss_token {
@@ -162,7 +162,7 @@ pub mod sss_token {
         instructions::remove_from_blacklist::handler(ctx, address)
     }
 
-    pub fn seize(ctx: Context<Seize>, amount: u64) -> Result<()> {
+    pub fn seize<'info>(ctx: Context<'_, '_, '_, 'info, Seize<'info>>, amount: u64) -> Result<()> {
         instructions::seize::handler(ctx, amount)
     }
 }

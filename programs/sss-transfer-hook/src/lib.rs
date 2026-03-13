@@ -11,7 +11,7 @@
 // │  Index 0: source token account                                   │
 // │  Index 1: mint                                                   │
 // │  Index 2: destination token account                              │
-// │  Index 3: source owner/authority (signer)                       │
+// │  Index 3: transfer authority/delegate                            │
 // │  Index 4: ExtraAccountMetaList PDA (this program)               │
 // │                                                                  │
 // │  EXTRA ACCOUNTS (resolved dynamically by Token-2022):           │
@@ -26,7 +26,8 @@
 // │  - If neither exists → ALLOW transfer                           │
 // │                                                                  │
 // │  HOW OWNER IS RESOLVED:                                          │
-// │  - Source owner: directly from standard account index 3          │
+// │  - Source owner: extracted from source token account data        │
+// │    at byte offset 32 (works for owner-signed and delegate flows) │
 // │  - Dest owner: extracted from destination token account data    │
 // │    at byte offset 32 (after the mint pubkey in Token-2022       │
 // │    account layout: [mint: Pubkey(32), owner: Pubkey(32), ...])  │
@@ -38,12 +39,13 @@ use spl_tlv_account_resolution::{
 };
 use spl_transfer_hook_interface::instruction::ExecuteInstruction;
 
-declare_id!("8hCc8wEKWuSVqQLo5HKwEYuJVR7GaQTxcXw8he38ZVUK");
+declare_id!("8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j");
 
 /// The sss-token program ID. Must match the deployed sss_token program.
 /// REPLACE after deployment.
 pub const SSS_TOKEN_PROGRAM_ID: anchor_lang::prelude::Pubkey =
-    anchor_lang::pubkey!("sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk");
+    anchor_lang::pubkey!("A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q");
+
 
 
 /// Seed used to derive the ExtraAccountMetaList PDA.
@@ -98,7 +100,9 @@ pub mod sss_transfer_hook {
             // ── Index 7: Source owner BlacklistEntry PDA ─────────
             // Derived: ["blacklist", config, source_owner] using sss_token program
             // config is at overall index 6
-            // source_owner is at standard index 3 (authority)
+            // source_owner is extracted from source token account (index 0)
+            // at byte offset 32, so this works for both owner-signed and
+            // delegate-based transfers (e.g. seize).
             ExtraAccountMeta::new_external_pda_with_seeds(
                 5, // program index (sss_token)
                 &[
@@ -106,7 +110,11 @@ pub mod sss_transfer_hook {
                         bytes: BLACKLIST_SEED.to_vec(),
                     },
                     Seed::AccountKey { index: 6 }, // stablecoin_config
-                    Seed::AccountKey { index: 3 }, // source authority/owner
+                    Seed::AccountData {
+                        account_index: 0,  // source token account
+                        data_index: 32,    // offset to owner field
+                        length: 32,        // Pubkey is 32 bytes
+                    },
                 ],
                 false,
                 false,
@@ -193,11 +201,16 @@ pub mod sss_transfer_hook {
         accounts: &'info [AccountInfo<'info>],
         data: &[u8],
     ) -> Result<()> {
+        msg!("=== Transfer Hook Fallback Entry ===");
+        msg!("Accounts received: {}", accounts.len());
+        
         // Check if incoming instruction matches the Transfer Hook Execute discriminator
         let instruction = spl_transfer_hook_interface::instruction::TransferHookInstruction::unpack(data)?;
 
         match instruction {
-            spl_transfer_hook_interface::instruction::TransferHookInstruction::Execute { amount: _ } => {
+            spl_transfer_hook_interface::instruction::TransferHookInstruction::Execute { amount } => {
+                msg!("Execute instruction - amount: {}", amount);
+                
                 // Reconstruct the accounts for our handler.
                 // Standard layout from Token-2022:
                 //   0: source
@@ -209,8 +222,12 @@ pub mod sss_transfer_hook {
 
                 // Verify we have enough accounts
                 if accounts.len() < 9 {
+                    msg!("ERROR: Not enough accounts. Expected 9+, got {}", accounts.len());
                     return Err(ProgramError::NotEnoughAccountKeys.into());
                 }
+                
+                msg!("Account count OK: {}", accounts.len());
+                msg!("Account count OK: {}", accounts.len());
 
                 let _source_account = &accounts[0];
                 let mint = &accounts[1];
@@ -221,30 +238,66 @@ pub mod sss_transfer_hook {
                 let _stablecoin_config = &accounts[6];
                 let source_blacklist = &accounts[7];
                 let dest_blacklist = &accounts[8];
+                
+                msg!("Mint: {}", mint.key);
+                msg!("Authority: {}", _authority.key);
+                msg!("SSS Token Program: {}", _sss_token_program.key);
+                msg!("Stablecoin Config: {}", _stablecoin_config.key);
+                msg!("Source Blacklist: {}", source_blacklist.key);
+                msg!("Dest Blacklist: {}", dest_blacklist.key);
 
                 // ── Validate extra account meta list PDA ─────────
                 let (expected_meta_pda, _bump) = Pubkey::find_program_address(
                     &[EXTRA_META_SEED, mint.key.as_ref()],
                     program_id,
                 );
+                msg!("Expected meta PDA: {}", expected_meta_pda);
+                msg!("Actual meta PDA: {}", extra_meta_list.key);
+                
                 if *extra_meta_list.key != expected_meta_pda {
+                    msg!("ERROR: Meta PDA mismatch!");
                     return Err(ProgramError::InvalidSeeds.into());
+                }
+                msg!("Meta PDA validated");
+
+                // ── Check if this is a permanent delegate (seize) operation ──
+                // When the authority is the StablecoinConfig PDA, this is a seize
+                // operation which should bypass blacklist checks.
+                // The StablecoinConfig PDA is derived from ["stablecoin", mint]
+                let mint_key = mint.key;
+                let (expected_config_pda, _) = Pubkey::find_program_address(
+                    &[b"stablecoin", mint_key.as_ref()],
+                    &_sss_token_program.key,
+                );
+                
+                msg!("Expected config PDA for bypass: {}", expected_config_pda);
+                
+                let is_seize_operation = *_authority.key == expected_config_pda;
+                msg!("Is seize operation (bypass): {}", is_seize_operation);
+                
+                if is_seize_operation {
+                    msg!("✓ BYPASS: Permanent delegate seize operation detected");
+                    return Ok(());
                 }
 
                 // ── Check blacklists ─────────────────────────────
+                msg!("Checking blacklists...");
+                msg!("Source blacklist data_len: {}", source_blacklist.data_len());
+                msg!("Dest blacklist data_len: {}", dest_blacklist.data_len());
+                
                 // If the account has data (exists and is initialized),
                 // the owner is blacklisted.
                 if source_blacklist.data_len() > 0 {
-                    msg!("Transfer rejected: source owner is blacklisted");
+                    msg!("✗ REJECT: Source owner is blacklisted");
                     return Err(ProgramError::Custom(6030).into());
                 }
 
                 if dest_blacklist.data_len() > 0 {
-                    msg!("Transfer rejected: destination owner is blacklisted");
+                    msg!("✗ REJECT: Destination owner is blacklisted");
                     return Err(ProgramError::Custom(6030).into());
                 }
 
-                msg!("Transfer hook: both parties clear, transfer allowed");
+                msg!("✓ ALLOW: Both parties clear, transfer allowed");
                 Ok(())
             }
             _ => {
@@ -308,7 +361,7 @@ pub struct TransferHook<'info> {
     /// CHECK: Destination token account (passed by Token-2022)
     pub destination: AccountInfo<'info>,
 
-    /// CHECK: Source owner/authority (passed by Token-2022)
+    /// CHECK: Transfer authority/delegate (passed by Token-2022)
     pub authority: AccountInfo<'info>,
 
     /// CHECK: ExtraAccountMetaList PDA

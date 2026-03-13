@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/sss_transfer_hook.json`.
  */
 export type SssTransferHook = {
-  "address": "8hCc8wEKWuSVqQLo5HKwEYuJVR7GaQTxcXw8he38ZVUK",
+  "address": "8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j",
   "metadata": {
     "name": "sssTransferHook",
     "version": "0.1.0",

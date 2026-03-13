@@ -75,6 +75,11 @@ export declare class ComplianceModule {
      * Transfers tokens from `from` to `to` without the owner's consent.
      * The config PDA acts as the permanent delegate.
      *
+     * CRITICAL: On SSS-2 mints, Token-2022 requires the transfer hook's
+     * extra accounts to be present on every transfer_checked call. This
+     * method automatically resolves those accounts (ExtraAccountMetaList,
+     * hook program, blacklist PDAs) and passes them as remainingAccounts.
+     *
      * Policy:
      * - Partial seizure is supported (specify exact amount)
      * - Source account does NOT need to be frozen first

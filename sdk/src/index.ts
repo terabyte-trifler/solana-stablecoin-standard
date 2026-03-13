@@ -27,6 +27,7 @@ export {
   findBlacklistEntryPda,
   findExtraAccountMetaListPda,
   findAta,
+  resolveTransferHookAccounts,
   SSS_TOKEN_PROGRAM_ID,
   SSS_TRANSFER_HOOK_PROGRAM_ID,
   TOKEN_2022_PROGRAM_ID,

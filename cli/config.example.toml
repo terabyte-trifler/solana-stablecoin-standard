@@ -1,0 +1,55 @@
+# config.example.toml
+#
+# Example configuration for sss-token init --custom config.toml
+#
+# This creates a fully customized stablecoin with pre-configured roles.
+# All fields under [token] are required except uri.
+# All fields under [features] default to false if omitted.
+# [roles] is optional — roles can be added later via CLI.
+
+[token]
+name = "My Stablecoin"
+symbol = "MYUSD"
+decimals = 6
+uri = "https://arweave.net/your-metadata-json-hash"
+
+[features]
+# SSS-1: all false
+# SSS-2: permanent_delegate = true, transfer_hook = true
+permanent_delegate = true
+transfer_hook = true
+# When true, all new token accounts start frozen (strict KYC mode)
+default_account_frozen = false
+
+[roles]
+# Optional: path to master authority keypair
+# If omitted, uses the --keypair flag or Solana CLI default
+# master_authority = "path/to/admin-keypair.json"
+
+# Minters with per-epoch quotas
+# quota = 0 means unlimited
+# quota is in smallest units (e.g., 1000000000000 = 1,000,000 tokens with 6 decimals)
+minters = [
+  { address = "Abc111111111111111111111111111111111111111111", quota = 1000000000000 },
+  { address = "Def222222222222222222222222222222222222222222", quota = 500000000000 },
+]
+
+# Addresses that can pause operations
+pausers = [
+  "Ghi333333333333333333333333333333333333333333",
+]
+
+# Addresses that can burn tokens from their own accounts
+burners = [
+  "Abc111111111111111111111111111111111111111111",
+]
+
+# SSS-2 only: addresses that can manage the blacklist
+blacklisters = [
+  "Jkl444444444444444444444444444444444444444444",
+]
+
+# SSS-2 only: addresses that can seize tokens
+seizers = [
+  "Mno555555555555555555555555555555555555555555",
+]

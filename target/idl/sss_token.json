@@ -1,5 +1,5 @@
 {
-  "address": "sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk",
+  "address": "A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q",
   "metadata": {
     "name": "sss_token",
     "version": "0.1.0",
@@ -1290,8 +1290,7 @@
         {
           "name": "source_token_account",
           "docs": [
-            "The token account to seize FROM. Can be any account for this mint.",
-            "The permanent delegate (config PDA) overrides ownership."
+            "The token account to seize FROM."
           ],
           "writable": true
         },
@@ -1304,6 +1303,24 @@
         },
         {
           "name": "token_program"
+        },
+        {
+          "name": "extra_account_meta_list",
+          "docs": [
+            "Passed explicitly so Anchor doesn't filter it out."
+          ]
+        },
+        {
+          "name": "transfer_hook_program",
+          "docs": [
+            "Passed explicitly so Anchor doesn't filter it out."
+          ]
+        },
+        {
+          "name": "sss_token_program",
+          "docs": [
+            "Passed explicitly so Anchor doesn't filter it out."
+          ]
         }
       ],
       "args": [

@@ -2669,6 +2669,7 @@ version = "0.1.0"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
+ "spl-pod 0.4.0",
  "spl-token-2022",
  "spl-token-metadata-interface 0.5.1",
  "spl-type-length-value 0.6.0",

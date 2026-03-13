@@ -1,0 +1,62 @@
+# backend/docker-compose.yml
+#
+# Usage:
+#   docker compose up          — start in foreground
+#   docker compose up -d       — start in background
+#   docker compose logs -f     — follow logs
+#   docker compose down        — stop
+#
+# Required: Set STABLECOIN_CONFIG to your StablecoinConfig PDA pubkey.
+# Optional: Mount an authority keypair for write operations.
+
+version: "3.8"
+
+services:
+  sss-backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      # ── Required ────────────────────────────────────────────
+      - STABLECOIN_CONFIG=${STABLECOIN_CONFIG:?Set STABLECOIN_CONFIG to your config PDA}
+
+      # ── Solana connection ───────────────────────────────────
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.devnet.solana.com}
+      - SOLANA_WS_URL=${SOLANA_WS_URL:-}
+
+      # ── Authority (for write operations) ────────────────────
+      # Mount your keypair file and set the path inside the container
+      - AUTHORITY_KEYPAIR=${AUTHORITY_KEYPAIR:-}
+
+      # ── Server ──────────────────────────────────────────────
+      - PORT=3000
+      - HOST=0.0.0.0
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - NODE_ENV=${NODE_ENV:-production}
+
+      # ── Webhooks (optional) ─────────────────────────────────
+      - WEBHOOK_URL=${WEBHOOK_URL:-}
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET:-}
+      - WEBHOOK_MAX_RETRIES=${WEBHOOK_MAX_RETRIES:-3}
+
+      # ── Sanctions screening (optional) ──────────────────────
+      - SANCTIONS_API_URL=${SANCTIONS_API_URL:-}
+      - SANCTIONS_API_KEY=${SANCTIONS_API_KEY:-}
+    volumes:
+      # Mount keypair file for write operations (optional)
+      # Example: KEYPAIR_PATH=~/.config/solana/id.json
+      - ${KEYPAIR_PATH:-/dev/null}:/app/keypair.json:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"

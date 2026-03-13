@@ -36,6 +36,7 @@ import {
   Keypair,
   PublicKey,
   SystemProgram,
+  Transaction,
   TransactionSignature,
 } from "@solana/web3.js";
 import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
@@ -47,9 +48,7 @@ import {
   AuditLogFilters,
   AuditEvent,
 } from "./types";
-import { findBlacklistEntryPda, SSS_TOKEN_PROGRAM_ID } from "./pda";
-
-// Import the generated IDL type
+import { findBlacklistEntryPda, resolveTransferHookAccounts } from "./pda";
 import type { SssToken } from "../idl/sss_token";
 
 export class ComplianceModule {
@@ -108,13 +107,13 @@ export class ComplianceModule {
     const [blacklistEntryPda] = findBlacklistEntryPda(this.configPda, address);
 
     return this.program.methods
-      .add_to_blacklist(address, reason)
-      .accounts({
+      .addToBlacklist(address, reason)
+      .accountsPartial({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-        blacklist_entry: blacklistEntryPda,
-        system_program: SystemProgram.programId,
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+        blacklistEntry: blacklistEntryPda,
+        systemProgram: SystemProgram.programId,
       })
       .signers([authority])
       .rpc();
@@ -136,12 +135,12 @@ export class ComplianceModule {
     const [blacklistEntryPda] = findBlacklistEntryPda(this.configPda, address);
 
     return this.program.methods
-      .remove_from_blacklist(address)
-      .accounts({
+      .removeFromBlacklist(address)
+      .accountsPartial({
         authority: authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
-        blacklist_entry: blacklistEntryPda,
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
+        blacklistEntry: blacklistEntryPda,
       })
       .signers([authority])
       .rpc();
@@ -179,7 +178,7 @@ export class ComplianceModule {
     const [blacklistEntryPda] = findBlacklistEntryPda(this.configPda, address);
 
     try {
-      const raw = await (this.program.account as any).blacklist_entry.fetch(
+      const raw: any = await (this.program.account as any).blacklistEntry.fetch(
         blacklistEntryPda,
       );
       return {
@@ -203,7 +202,7 @@ export class ComplianceModule {
    * Can be expensive for large blacklists — consider pagination for production.
    */
   async getAllBlacklisted(): Promise<BlacklistEntryAccount[]> {
-    const accounts = await (this.program.account as any).blacklist_entry.all([
+    const accounts = await (this.program.account as any).blacklistEntry.all([
       {
         memcmp: {
           offset: 8, // After Anchor discriminator
@@ -212,7 +211,7 @@ export class ComplianceModule {
       },
     ]);
 
-    return accounts.map(({ account: raw }: { account: any }) => ({
+    return accounts.map(({ account: raw }: any) => ({
       stablecoin: raw.stablecoin as PublicKey,
       address: raw.address as PublicKey,
       reason: raw.reason as string,
@@ -231,6 +230,11 @@ export class ComplianceModule {
    *
    * Transfers tokens from `from` to `to` without the owner's consent.
    * The config PDA acts as the permanent delegate.
+   *
+   * CRITICAL: On SSS-2 mints, Token-2022 requires the transfer hook's
+   * extra accounts to be present on every transfer_checked call. This
+   * method automatically resolves those accounts (ExtraAccountMetaList,
+   * hook program, blacklist PDAs) and passes them as remainingAccounts.
    *
    * Policy:
    * - Partial seizure is supported (specify exact amount)
@@ -253,19 +257,58 @@ export class ComplianceModule {
    * ```
    */
   async seize(params: SeizeParams): Promise<TransactionSignature> {
-    return this.program.methods
+    // Resolve the transfer hook's extra accounts.
+    // These are required by Token-2022 for any transfer_checked on
+    // a mint with a TransferHook extension. Without them → 0xa261c2c0.
+    const hookAccounts = await resolveTransferHookAccounts(
+      this.connection,
+      this.mint,
+      params.from,
+      params.to,
+      this.configPda,
+    );
+
+    // Build instruction with base accounts + ExtraAccountMetaList.
+    // The remaining 4 resolved metas (sss-token program, config, 2 blacklist PDAs)
+    // are passed as remaining accounts.
+    const ix = await this.program.methods
       .seize(params.amount)
-      .accounts({
+      .accountsPartial({
         authority: params.authority.publicKey,
-        stablecoin_config: this.configPda,
-        role_manager: this.roleManagerPda,
+        stablecoinConfig: this.configPda,
+        roleManager: this.roleManagerPda,
         mint: this.mint,
-        source_token_account: params.from,
-        destination_token_account: params.to,
-        token_program: TOKEN_2022_PROGRAM_ID,
-      })
-      .signers([params.authority])
-      .rpc();
+        sourceTokenAccount: params.from,
+        destinationTokenAccount: params.to,
+        tokenProgram: TOKEN_2022_PROGRAM_ID,
+        extraAccountMetaList: hookAccounts[0].pubkey,
+        transferHookProgram: hookAccounts[1].pubkey, // Kept for Anchor struct validation
+        sssTokenProgram: hookAccounts[2].pubkey, // Kept for Anchor struct validation
+      } as any)
+      .instruction();
+
+    // Append config + blacklist PDAs as remaining accounts.
+    // hookAccounts[0..2] are passed explicitly in accountsPartial:
+    // [0] ExtraAccountMetaList, [1] hook program, [2] sss-token program.
+    // So we start from [3]:
+    // [3] config PDA, [4] source blacklist PDA, [5] dest blacklist PDA.
+    for (let i = 3; i < hookAccounts.length; i++) {
+      const acc = hookAccounts[i];
+      ix.keys.push({
+        pubkey: acc.pubkey,
+        isSigner: acc.isSigner,
+        isWritable: acc.isWritable,
+      });
+    }
+
+    // Build and send the transaction
+    const tx = new Transaction().add(ix);
+    const { blockhash } = await this.connection.getLatestBlockhash();
+    tx.recentBlockhash = blockhash;
+    tx.feePayer = params.authority.publicKey;
+    tx.sign(params.authority);
+
+    return await this.connection.sendRawTransaction(tx.serialize());
   }
 
   // ================================================================

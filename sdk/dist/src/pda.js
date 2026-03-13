@@ -12,14 +12,22 @@ exports.findRoleManagerPda = findRoleManagerPda;
 exports.findBlacklistEntryPda = findBlacklistEntryPda;
 exports.findExtraAccountMetaListPda = findExtraAccountMetaListPda;
 exports.findAta = findAta;
+exports.resolveTransferHookAccounts = resolveTransferHookAccounts;
 const web3_js_1 = require("@solana/web3.js");
+const spl_token_1 = require("@solana/spl-token");
+function envValue(name) {
+    if (typeof process === "undefined" || !process.env)
+        return undefined;
+    return process.env[name];
+}
 // ============================================================================
 // PROGRAM IDS — Replace after deployment
 // ============================================================================
 /** The sss-token main program ID. Replace with actual deployed address. */
-exports.SSS_TOKEN_PROGRAM_ID = new web3_js_1.PublicKey("sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk");
+exports.SSS_TOKEN_PROGRAM_ID = new web3_js_1.PublicKey(envValue("SSS_TOKEN_PROGRAM_ID") ?? "A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q");
 /** The sss-transfer-hook program ID. Replace with actual deployed address. */
-exports.SSS_TRANSFER_HOOK_PROGRAM_ID = new web3_js_1.PublicKey("8hCc8wEKWuSVqQLo5HKwEYuJVR7GaQTxcXw8he38ZVUK");
+exports.SSS_TRANSFER_HOOK_PROGRAM_ID = new web3_js_1.PublicKey(envValue("SSS_TRANSFER_HOOK_PROGRAM_ID") ??
+    "8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j");
 /** Token-2022 program ID. */
 exports.TOKEN_2022_PROGRAM_ID = new web3_js_1.PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
 // ============================================================================
@@ -99,5 +107,54 @@ function findAta(mint, owner) {
     const { getAssociatedTokenAddressSync } = require("@solana/spl-token");
     return getAssociatedTokenAddressSync(mint, owner, true, // allowOwnerOffCurve (allow PDA owners)
     exports.TOKEN_2022_PROGRAM_ID);
+}
+// ============================================================================
+// TRANSFER HOOK ACCOUNT RESOLUTION
+// ============================================================================
+/**
+ * Resolve ALL extra accounts needed by Token-2022 when processing a
+ * transfer_checked on an SSS-2 mint with a TransferHook extension.
+ *
+ * Token-2022's transfer_checked processor scans the instruction's
+ * account list (after the base 4: source, mint, dest, authority)
+ * to find the ExtraAccountMetaList, the hook program, and all
+ * resolved extra metas. If any are missing → error 0xa261c2c0.
+ *
+ * This function returns the accounts in the exact order that
+ * Token-2022 expects (matching the ExtraAccountMetaList layout
+ * defined in sss-transfer-hook's initialize_extra_account_meta_list).
+ *
+ * @param connection - Solana connection (to fetch token account owners)
+ * @param mint - The Token-2022 mint
+ * @param sourceTokenAccount - Source token account pubkey
+ * @param destTokenAccount - Destination token account pubkey
+ * @param configPda - StablecoinConfig PDA
+ * @returns Array of AccountMeta objects to pass as remainingAccounts
+ */
+async function resolveTransferHookAccounts(connection, mint, sourceTokenAccount, destTokenAccount, configPda) {
+    // Build a probe transfer instruction and ask SPL Token's official resolver
+    // to add hook accounts from the on-chain ExtraAccountMetaList. This avoids
+    // hardcoded assumptions when metas evolve across deployments.
+    const probeIx = (0, spl_token_1.createTransferCheckedInstruction)(sourceTokenAccount, mint, destTokenAccount, configPda, // permanent delegate authority for seize path
+    0, // amount is irrelevant for our current seed set
+    0, // decimals are irrelevant for Execute account resolution
+    [], exports.TOKEN_2022_PROGRAM_ID);
+    await (0, spl_token_1.addExtraAccountMetasForExecute)(connection, probeIx, exports.SSS_TRANSFER_HOOK_PROGRAM_ID, sourceTokenAccount, mint, destTokenAccount, configPda, 0n, "confirmed");
+    // After base 4 accounts, SPL appends:
+    //   resolved extra metas..., hook program, extra-account-meta-list PDA
+    // We normalize to the order expected by seize():
+    //   [extra-meta-list, hook-program, resolved metas...]
+    const appended = probeIx.keys.slice(4);
+    if (appended.length < 2) {
+        throw new Error("Transfer hook accounts were not resolved");
+    }
+    const hookProgramMeta = appended[appended.length - 2];
+    const extraMetaList = appended[appended.length - 1];
+    const resolvedMetas = appended.slice(0, appended.length - 2);
+    return [extraMetaList, hookProgramMeta, ...resolvedMetas].map((k) => ({
+        pubkey: k.pubkey,
+        isSigner: k.isSigner,
+        isWritable: k.isWritable,
+    }));
 }
 //# sourceMappingURL=pda.js.map

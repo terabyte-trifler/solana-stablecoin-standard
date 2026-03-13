@@ -1,4 +1,4 @@
-import { PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 /** The sss-token main program ID. Replace with actual deployed address. */
 export declare const SSS_TOKEN_PROGRAM_ID: PublicKey;
 /** The sss-transfer-hook program ID. Replace with actual deployed address. */
@@ -60,4 +60,29 @@ export declare function findExtraAccountMetaListPda(mint: PublicKey, hookProgram
  * that defaults to the Token-2022 program.
  */
 export declare function findAta(mint: PublicKey, owner: PublicKey): PublicKey;
+/**
+ * Resolve ALL extra accounts needed by Token-2022 when processing a
+ * transfer_checked on an SSS-2 mint with a TransferHook extension.
+ *
+ * Token-2022's transfer_checked processor scans the instruction's
+ * account list (after the base 4: source, mint, dest, authority)
+ * to find the ExtraAccountMetaList, the hook program, and all
+ * resolved extra metas. If any are missing → error 0xa261c2c0.
+ *
+ * This function returns the accounts in the exact order that
+ * Token-2022 expects (matching the ExtraAccountMetaList layout
+ * defined in sss-transfer-hook's initialize_extra_account_meta_list).
+ *
+ * @param connection - Solana connection (to fetch token account owners)
+ * @param mint - The Token-2022 mint
+ * @param sourceTokenAccount - Source token account pubkey
+ * @param destTokenAccount - Destination token account pubkey
+ * @param configPda - StablecoinConfig PDA
+ * @returns Array of AccountMeta objects to pass as remainingAccounts
+ */
+export declare function resolveTransferHookAccounts(connection: Connection, mint: PublicKey, sourceTokenAccount: PublicKey, destTokenAccount: PublicKey, configPda: PublicKey): Promise<{
+    pubkey: PublicKey;
+    isSigner: boolean;
+    isWritable: boolean;
+}[]>;
 //# sourceMappingURL=pda.d.ts.map
