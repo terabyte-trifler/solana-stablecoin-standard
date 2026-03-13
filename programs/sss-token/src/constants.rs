@@ -28,6 +28,21 @@ pub const ROLES_SEED: &[u8] = b"roles";
 /// token account during enforcement.
 pub const BLACKLIST_SEED: &[u8] = b"blacklist";
 
+/// Seed for the ExtraAccountMetaList PDA in the transfer hook program.
+/// Standard seed defined by the spl-transfer-hook-interface.
+pub const EXTRA_ACCOUNT_METAS_SEED: &[u8] = b"extra-account-metas";
+
+/// The program ID of the sss-transfer-hook program.
+/// Used when initializing the TransferHook extension on the mint.
+/// REPLACE this with the actual deployed program ID.
+///
+/// To generate a vanity address: `solana-keygen grind --starts-with SSSh:1`
+/// The program ID of the sss-transfer-hook program.
+/// Used when initializing the TransferHook extension on the mint.
+pub const TRANSFER_HOOK_PROGRAM_ID: anchor_lang::prelude::Pubkey =
+    anchor_lang::pubkey!("8hCc8wEKWuSVqQLo5HKwEYuJVR7GaQTxcXw8he38ZVUK");
+
+
 // ============================================================================
 // STRING FIELD MAX LENGTHS (in bytes, NOT characters)
 // ============================================================================

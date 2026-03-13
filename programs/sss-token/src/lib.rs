@@ -1,179 +1,171 @@
 // programs/sss-token/src/lib.rs
 //
+// Solana Stablecoin Standard (SSS) — Main Program
+//
 // ┌──────────────────────────────────────────────────────────────────┐
-// │           Solana Stablecoin Standard (SSS) — Main Program       │
+// │  EVENT-TO-INSTRUCTION MAPPING                                    │
 // │                                                                  │
-// │  A single configurable program that supports both presets        │
-// │  (SSS-1 Minimal, SSS-2 Compliant) via initialization params.   │
-// │                                                                  │
-// │  SSS-1: Mint + freeze authority + metadata. The basics.         │
-// │  SSS-2: SSS-1 + permanent delegate + transfer hook + blacklist. │
-// │                                                                  │
-// │  The program uses Token-2022 (Token Extensions Program) for     │
-// │  the underlying mint, not the legacy SPL Token program.         │
+// │  initialize              → StablecoinInitialized                │
+// │  mint_tokens             → TokensMinted                         │
+// │  burn_tokens             → TokensBurned                         │
+// │  freeze_account          → AccountFrozen                        │
+// │  thaw_account            → AccountThawed                        │
+// │  pause                   → StablecoinPaused                     │
+// │  unpause                 → StablecoinUnpaused                   │
+// │  add_minter              → MinterAdded                          │
+// │  remove_minter           → MinterRemoved                        │
+// │  update_minter_quota     → MinterQuotaUpdated                   │
+// │  grant_role              → RoleGranted                          │
+// │  revoke_role             → RoleRevoked                          │
+// │  transfer_authority      → AuthorityTransferProposed            │
+// │  accept_authority        → AuthorityTransferAccepted            │
+// │  cancel_authority_transfer → AuthorityTransferCancelled         │
+// │  add_to_blacklist        → AddressBlacklisted                   │
+// │  remove_from_blacklist   → AddressRemovedFromBlacklist          │
+// │  seize                   → TokensSeized                         │
 // └──────────────────────────────────────────────────────────────────┘
 
 use anchor_lang::prelude::*;
 
-// Module declarations
 pub mod constants;
 pub mod errors;
 pub mod events;
 pub mod instructions;
 pub mod state;
 
-// Re-export commonly used types for external consumers (SDK, tests)
 pub use constants::*;
 pub use errors::*;
 pub use state::*;
 
-// Program ID — replace with your actual deployed program ID.
-// Generate one with: `solana-keygen grind --starts-with SSS:1`
-// For local development, Anchor generates a keypair in target/deploy/
-declare_id!("SSS1TokenXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+declare_id!("sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk");
 
-/// The SSS Token program.
-///
-/// All instructions are defined here. Each delegates to a handler
-/// function in the `instructions` module.
-///
-/// NAMING CONVENTION:
-/// - Snake_case function names match the instruction discriminator
-/// - Each function takes a Context<T> where T is the Accounts struct
-/// - Additional parameters come from the instruction data
 #[program]
 pub mod sss_token {
     use super::*;
 
-    // =================================================================
-    // CORE INSTRUCTIONS (SSS-1 + SSS-2)
-    // =================================================================
-    // These will be implemented in Phase 1.3. Signatures shown here
-    // as the API contract.
+    pub fn initialize(
+        ctx: Context<instructions::Initialize>,
+        name: String,
+        symbol: String,
+        uri: String,
+        decimals: u8,
+        enable_permanent_delegate: bool,
+        enable_transfer_hook: bool,
+        default_account_frozen: bool,
+    ) -> Result<()> {
+        instructions::initialize::handler(
+            ctx, name, symbol, uri, decimals,
+            enable_permanent_delegate, enable_transfer_hook,
+            default_account_frozen,
+        )
+    }
 
-    // pub fn initialize(
-    //     ctx: Context<Initialize>,
-    //     name: String,
-    //     symbol: String,
-    //     uri: String,
-    //     decimals: u8,
-    //     enable_permanent_delegate: bool,
-    //     enable_transfer_hook: bool,
-    //     default_account_frozen: bool,
-    // ) -> Result<()> {
-    //     instructions::initialize::handler(
-    //         ctx, name, symbol, uri, decimals,
-    //         enable_permanent_delegate, enable_transfer_hook,
-    //         default_account_frozen,
-    //     )
-    // }
+    /// Initialize the transfer hook's ExtraAccountMetaList for SSS-2 mints.
+    /// Must be called after `initialize` and before any token transfers.
+    pub fn init_hook_accounts(ctx: Context<instructions::InitHookAccounts>) -> Result<()> {
+        instructions::init_hook_accounts::handler(ctx)
+    }
 
-    // pub fn mint(ctx: Context<MintTokens>, amount: u64) -> Result<()> {
-    //     instructions::mint::handler(ctx, amount)
-    // }
+    pub fn mint_tokens(ctx: Context<instructions::MintTokens>, amount: u64) -> Result<()> {
+        instructions::mint_tokens::handler(ctx, amount)
+    }
 
-    // pub fn burn(ctx: Context<BurnTokens>, amount: u64) -> Result<()> {
-    //     instructions::burn::handler(ctx, amount)
-    // }
+    pub fn burn_tokens(ctx: Context<instructions::BurnTokens>, amount: u64) -> Result<()> {
+        instructions::burn_tokens::handler(ctx, amount)
+    }
 
-    // pub fn freeze_account(ctx: Context<FreezeAccount>) -> Result<()> {
-    //     instructions::freeze::handler(ctx)
-    // }
+    pub fn freeze_account(ctx: Context<instructions::FreezeAccount>) -> Result<()> {
+        instructions::freeze_thaw::handle_freeze(ctx)
+    }
 
-    // pub fn thaw_account(ctx: Context<ThawAccount>) -> Result<()> {
-    //     instructions::thaw::handler(ctx)
-    // }
+    pub fn thaw_account(ctx: Context<instructions::ThawAccount>) -> Result<()> {
+        instructions::freeze_thaw::handle_thaw(ctx)
+    }
 
-    // pub fn pause(ctx: Context<Pause>) -> Result<()> {
-    //     instructions::pause::handler(ctx)
-    // }
+    pub fn pause(ctx: Context<instructions::Pause>) -> Result<()> {
+        instructions::pause_unpause::handle_pause(ctx)
+    }
 
-    // pub fn unpause(ctx: Context<Unpause>) -> Result<()> {
-    //     instructions::unpause::handler(ctx)
-    // }
+    pub fn unpause(ctx: Context<instructions::Unpause>) -> Result<()> {
+        instructions::pause_unpause::handle_unpause(ctx)
+    }
 
-    // pub fn add_minter(
-    //     ctx: Context<UpdateMinter>,
-    //     minter: Pubkey,
-    //     quota: u64,
-    // ) -> Result<()> {
-    //     instructions::update_minter::handle_add(ctx, minter, quota)
-    // }
+    pub fn add_minter(
+        ctx: Context<instructions::UpdateMinter>,
+        minter: Pubkey,
+        quota: u64,
+    ) -> Result<()> {
+        instructions::update_minter::handle_add(ctx, minter, quota)
+    }
 
-    // pub fn remove_minter(
-    //     ctx: Context<UpdateMinter>,
-    //     minter: Pubkey,
-    // ) -> Result<()> {
-    //     instructions::update_minter::handle_remove(ctx, minter)
-    // }
+    pub fn remove_minter(
+        ctx: Context<instructions::UpdateMinter>,
+        minter: Pubkey,
+    ) -> Result<()> {
+        instructions::update_minter::handle_remove(ctx, minter)
+    }
 
-    // pub fn update_minter_quota(
-    //     ctx: Context<UpdateMinter>,
-    //     minter: Pubkey,
-    //     new_quota: u64,
-    // ) -> Result<()> {
-    //     instructions::update_minter::handle_update_quota(ctx, minter, new_quota)
-    // }
+    pub fn update_minter_quota(
+        ctx: Context<instructions::UpdateMinter>,
+        minter: Pubkey,
+        new_quota: u64,
+    ) -> Result<()> {
+        instructions::update_minter::handle_update_quota(ctx, minter, new_quota)
+    }
 
-    // pub fn grant_role(
-    //     ctx: Context<UpdateRoles>,
-    //     role: RoleType,
-    //     grantee: Pubkey,
-    // ) -> Result<()> {
-    //     instructions::update_roles::handle_grant(ctx, role, grantee)
-    // }
+    pub fn grant_role(
+        ctx: Context<instructions::UpdateRoles>,
+        role: RoleType,
+        grantee: Pubkey,
+    ) -> Result<()> {
+        instructions::update_roles::handle_grant(ctx, role, grantee)
+    }
 
-    // pub fn revoke_role(
-    //     ctx: Context<UpdateRoles>,
-    //     role: RoleType,
-    //     revokee: Pubkey,
-    // ) -> Result<()> {
-    //     instructions::update_roles::handle_revoke(ctx, role, revokee)
-    // }
+    pub fn revoke_role(
+        ctx: Context<instructions::UpdateRoles>,
+        role: RoleType,
+        revokee: Pubkey,
+    ) -> Result<()> {
+        instructions::update_roles::handle_revoke(ctx, role, revokee)
+    }
 
-    // pub fn transfer_authority(
-    //     ctx: Context<TransferAuthority>,
-    //     new_authority: Pubkey,
-    // ) -> Result<()> {
-    //     instructions::transfer_authority::handle_propose(ctx, new_authority)
-    // }
+    pub fn transfer_authority(
+        ctx: Context<instructions::TransferAuthority>,
+        new_authority: Pubkey,
+    ) -> Result<()> {
+        instructions::transfer_authority::handle_propose(ctx, new_authority)
+    }
 
-    // pub fn accept_authority(ctx: Context<AcceptAuthority>) -> Result<()> {
-    //     instructions::transfer_authority::handle_accept(ctx)
-    // }
+    pub fn accept_authority(ctx: Context<instructions::AcceptAuthority>) -> Result<()> {
+        instructions::transfer_authority::handle_accept(ctx)
+    }
 
-    // pub fn cancel_authority_transfer(
-    //     ctx: Context<TransferAuthority>,
-    // ) -> Result<()> {
-    //     instructions::transfer_authority::handle_cancel(ctx)
-    // }
+    pub fn cancel_authority_transfer(
+        ctx: Context<instructions::TransferAuthority>,
+    ) -> Result<()> {
+        instructions::transfer_authority::handle_cancel(ctx)
+    }
 
-    // =================================================================
-    // SSS-2 COMPLIANCE INSTRUCTIONS
-    // =================================================================
+    pub fn add_to_blacklist(
+        ctx: Context<instructions::AddToBlacklist>,
+        address: Pubkey,
+        reason: String,
+    ) -> Result<()> {
+        instructions::add_to_blacklist::handler(ctx, address, reason)
+    }
 
-    // pub fn add_to_blacklist(
-    //     ctx: Context<AddToBlacklist>,
-    //     address: Pubkey,
-    //     reason: String,
-    // ) -> Result<()> {
-    //     instructions::add_to_blacklist::handler(ctx, address, reason)
-    // }
+    pub fn remove_from_blacklist(
+        ctx: Context<instructions::RemoveFromBlacklist>,
+        address: Pubkey,
+    ) -> Result<()> {
+        instructions::remove_from_blacklist::handler(ctx, address)
+    }
 
-    // pub fn remove_from_blacklist(
-    //     ctx: Context<RemoveFromBlacklist>,
-    //     address: Pubkey,
-    // ) -> Result<()> {
-    //     instructions::remove_from_blacklist::handler(ctx, address)
-    // }
-
-    // pub fn seize(ctx: Context<Seize>, amount: u64) -> Result<()> {
-    //     instructions::seize::handler(ctx, amount)
-    // }
+    pub fn seize(ctx: Context<instructions::Seize>, amount: u64) -> Result<()> {
+        instructions::seize::handler(ctx, amount)
+    }
 }
 
-/// Role types used in the `grant_role` and `revoke_role` instructions.
-/// Minter is handled separately because it has quota parameters.
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug, PartialEq)]
 pub enum RoleType {
     Burner,

@@ -11,3 +11,6 @@ anchor-spl = "0.31.1"
 spl-transfer-hook-interface = "0.8"
 spl-tlv-account-resolution = "0.8"
 spl-pod = "0.4"
+
+[profile.release]
+overflow-checks = true
