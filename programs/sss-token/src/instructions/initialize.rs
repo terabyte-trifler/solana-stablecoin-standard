@@ -46,7 +46,7 @@
 
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{program::invoke_signed, system_instruction};
-use anchor_spl::token_interface::{Mint, TokenInterface};
+use anchor_spl::token_interface::TokenInterface;
 
 use crate::constants::*;
 use crate::errors::SSSError;
@@ -238,7 +238,7 @@ pub fn handler(
     // The hook authority is set to the config PDA so we can update it.
     if enable_transfer_hook {
         let hook_program_id = crate::constants::TRANSFER_HOOK_PROGRAM_ID;
-        let ix = spl_token_2022::instruction::initialize_transfer_hook(
+        let ix = spl_token_2022::extension::transfer_hook::instruction::initialize(
             &token_program_id,
             &mint_key,
             Some(config_key), // authority = config PDA

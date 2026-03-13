@@ -108,23 +108,28 @@ pub fn handler(ctx: Context<MintTokens>, amount: u64) -> Result<()> {
     token_interface::mint_to(cpi_ctx, amount)?;
 
     // ── Update total supply ──────────────────────────────────────
+    // Capture values before mutable borrow to avoid borrow checker issues
 
-    let config = &mut ctx.accounts.stablecoin_config;
-    config.total_supply = config
-        .total_supply
-        .checked_add(amount)
-        .ok_or(SSSError::MathOverflow)?;
+    let config_key = ctx.accounts.stablecoin_config.key();
+    let new_total_supply = {
+        let config = &mut ctx.accounts.stablecoin_config;
+        config.total_supply = config
+            .total_supply
+            .checked_add(amount)
+            .ok_or(SSSError::MathOverflow)?;
+        config.total_supply
+    };
 
     // ── Emit event ───────────────────────────────────────────────
 
     let clock = Clock::get()?;
     emit!(TokensMinted {
-        config: ctx.accounts.stablecoin_config.key(),
+        config: config_key,
         mint: mint_key,
         recipient: ctx.accounts.recipient_token_account.key(),
         amount,
         minter: authority_key,
-        new_total_supply: config.total_supply,
+        new_total_supply,
         timestamp: clock.unix_timestamp,
     });
 

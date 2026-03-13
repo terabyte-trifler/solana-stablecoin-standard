@@ -89,19 +89,26 @@ pub fn handler(ctx: Context<BurnTokens>, amount: u64) -> Result<()> {
     token_interface::burn(cpi_ctx, amount)?;
 
     // ── Update total supply ──────────────────────────────────────
-    let config = &mut ctx.accounts.stablecoin_config;
-    config.total_supply = config
-        .total_supply
-        .checked_sub(amount)
-        .ok_or(SSSError::MathOverflow)?;
+    // Capture values before mutable borrow to avoid borrow checker issues
+
+    let config_key = ctx.accounts.stablecoin_config.key();
+    let mint_key = ctx.accounts.mint.key();
+    let new_total_supply = {
+        let config = &mut ctx.accounts.stablecoin_config;
+        config.total_supply = config
+            .total_supply
+            .checked_sub(amount)
+            .ok_or(SSSError::MathOverflow)?;
+        config.total_supply
+    };
 
     let clock = Clock::get()?;
     emit!(TokensBurned {
-        config: ctx.accounts.stablecoin_config.key(),
-        mint: ctx.accounts.mint.key(),
+        config: config_key,
+        mint: mint_key,
         amount,
         burner: authority_key,
-        new_total_supply: config.total_supply,
+        new_total_supply,
         timestamp: clock.unix_timestamp,
     });
 

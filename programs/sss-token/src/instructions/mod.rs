@@ -13,6 +13,7 @@ pub mod add_to_blacklist;
 pub mod remove_from_blacklist;
 pub mod seize;
 
+// Re-export everything from each module for Anchor's macro system
 pub use initialize::*;
 pub use init_hook_accounts::*;
 pub use mint_tokens::*;

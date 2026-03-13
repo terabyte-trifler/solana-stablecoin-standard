@@ -33,7 +33,6 @@
 // └──────────────────────────────────────────────────────────────────┘
 
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::program::invoke_signed;
 use spl_tlv_account_resolution::{
     account::ExtraAccountMeta, seeds::Seed, state::ExtraAccountMetaList,
 };
@@ -198,7 +197,7 @@ pub mod sss_transfer_hook {
         let instruction = spl_transfer_hook_interface::instruction::TransferHookInstruction::unpack(data)?;
 
         match instruction {
-            spl_transfer_hook_interface::instruction::TransferHookInstruction::Execute { amount } => {
+            spl_transfer_hook_interface::instruction::TransferHookInstruction::Execute { amount: _ } => {
                 // Reconstruct the accounts for our handler.
                 // Standard layout from Token-2022:
                 //   0: source
@@ -213,10 +212,10 @@ pub mod sss_transfer_hook {
                     return Err(ProgramError::NotEnoughAccountKeys.into());
                 }
 
-                let source_account = &accounts[0];
+                let _source_account = &accounts[0];
                 let mint = &accounts[1];
-                let dest_account = &accounts[2];
-                let authority = &accounts[3];
+                let _dest_account = &accounts[2];
+                let _authority = &accounts[3];
                 let extra_meta_list = &accounts[4];
                 let _sss_token_program = &accounts[5];
                 let _stablecoin_config = &accounts[6];

@@ -1,0 +1,1 @@
+/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/sbpf-solana-solana/release/sss_transfer_hook.so: /Users/terabyte_trifler/Documents/solana-stablecoin-standard/programs/sss-transfer-hook/src/lib.rs

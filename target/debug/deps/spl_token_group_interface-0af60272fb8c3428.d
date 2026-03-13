@@ -1,0 +1,8 @@
+/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/spl_token_group_interface-0af60272fb8c3428.d: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/error.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/instruction.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/state.rs
+
+/Users/terabyte_trifler/Documents/solana-stablecoin-standard/target/debug/deps/libspl_token_group_interface-0af60272fb8c3428.rmeta: /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/lib.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/error.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/instruction.rs /Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/state.rs
+
+/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/lib.rs:
+/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/error.rs:
+/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/instruction.rs:
+/Users/terabyte_trifler/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-group-interface-0.5.0/src/state.rs:

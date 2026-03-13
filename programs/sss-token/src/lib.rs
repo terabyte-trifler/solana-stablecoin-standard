@@ -36,6 +36,7 @@ pub mod state;
 pub use constants::*;
 pub use errors::*;
 pub use state::*;
+pub use instructions::*;
 
 declare_id!("sW63DevsGFLUj9hsGutuqazT6zGJr7vvWG4FusG6tTk");
 
@@ -44,7 +45,7 @@ pub mod sss_token {
     use super::*;
 
     pub fn initialize(
-        ctx: Context<instructions::Initialize>,
+        ctx: Context<Initialize>,
         name: String,
         symbol: String,
         uri: String,
@@ -62,36 +63,36 @@ pub mod sss_token {
 
     /// Initialize the transfer hook's ExtraAccountMetaList for SSS-2 mints.
     /// Must be called after `initialize` and before any token transfers.
-    pub fn init_hook_accounts(ctx: Context<instructions::InitHookAccounts>) -> Result<()> {
+    pub fn init_hook_accounts(ctx: Context<InitHookAccounts>) -> Result<()> {
         instructions::init_hook_accounts::handler(ctx)
     }
 
-    pub fn mint_tokens(ctx: Context<instructions::MintTokens>, amount: u64) -> Result<()> {
+    pub fn mint_tokens(ctx: Context<MintTokens>, amount: u64) -> Result<()> {
         instructions::mint_tokens::handler(ctx, amount)
     }
 
-    pub fn burn_tokens(ctx: Context<instructions::BurnTokens>, amount: u64) -> Result<()> {
+    pub fn burn_tokens(ctx: Context<BurnTokens>, amount: u64) -> Result<()> {
         instructions::burn_tokens::handler(ctx, amount)
     }
 
-    pub fn freeze_account(ctx: Context<instructions::FreezeAccount>) -> Result<()> {
+    pub fn freeze_account(ctx: Context<FreezeAccount>) -> Result<()> {
         instructions::freeze_thaw::handle_freeze(ctx)
     }
 
-    pub fn thaw_account(ctx: Context<instructions::ThawAccount>) -> Result<()> {
+    pub fn thaw_account(ctx: Context<ThawAccount>) -> Result<()> {
         instructions::freeze_thaw::handle_thaw(ctx)
     }
 
-    pub fn pause(ctx: Context<instructions::Pause>) -> Result<()> {
+    pub fn pause(ctx: Context<Pause>) -> Result<()> {
         instructions::pause_unpause::handle_pause(ctx)
     }
 
-    pub fn unpause(ctx: Context<instructions::Unpause>) -> Result<()> {
+    pub fn unpause(ctx: Context<Unpause>) -> Result<()> {
         instructions::pause_unpause::handle_unpause(ctx)
     }
 
     pub fn add_minter(
-        ctx: Context<instructions::UpdateMinter>,
+        ctx: Context<UpdateMinter>,
         minter: Pubkey,
         quota: u64,
     ) -> Result<()> {
@@ -99,14 +100,14 @@ pub mod sss_token {
     }
 
     pub fn remove_minter(
-        ctx: Context<instructions::UpdateMinter>,
+        ctx: Context<UpdateMinter>,
         minter: Pubkey,
     ) -> Result<()> {
         instructions::update_minter::handle_remove(ctx, minter)
     }
 
     pub fn update_minter_quota(
-        ctx: Context<instructions::UpdateMinter>,
+        ctx: Context<UpdateMinter>,
         minter: Pubkey,
         new_quota: u64,
     ) -> Result<()> {
@@ -114,7 +115,7 @@ pub mod sss_token {
     }
 
     pub fn grant_role(
-        ctx: Context<instructions::UpdateRoles>,
+        ctx: Context<UpdateRoles>,
         role: RoleType,
         grantee: Pubkey,
     ) -> Result<()> {
@@ -122,7 +123,7 @@ pub mod sss_token {
     }
 
     pub fn revoke_role(
-        ctx: Context<instructions::UpdateRoles>,
+        ctx: Context<UpdateRoles>,
         role: RoleType,
         revokee: Pubkey,
     ) -> Result<()> {
@@ -130,24 +131,24 @@ pub mod sss_token {
     }
 
     pub fn transfer_authority(
-        ctx: Context<instructions::TransferAuthority>,
+        ctx: Context<TransferAuthority>,
         new_authority: Pubkey,
     ) -> Result<()> {
         instructions::transfer_authority::handle_propose(ctx, new_authority)
     }
 
-    pub fn accept_authority(ctx: Context<instructions::AcceptAuthority>) -> Result<()> {
+    pub fn accept_authority(ctx: Context<AcceptAuthority>) -> Result<()> {
         instructions::transfer_authority::handle_accept(ctx)
     }
 
     pub fn cancel_authority_transfer(
-        ctx: Context<instructions::TransferAuthority>,
+        ctx: Context<TransferAuthority>,
     ) -> Result<()> {
         instructions::transfer_authority::handle_cancel(ctx)
     }
 
     pub fn add_to_blacklist(
-        ctx: Context<instructions::AddToBlacklist>,
+        ctx: Context<AddToBlacklist>,
         address: Pubkey,
         reason: String,
     ) -> Result<()> {
@@ -155,13 +156,13 @@ pub mod sss_token {
     }
 
     pub fn remove_from_blacklist(
-        ctx: Context<instructions::RemoveFromBlacklist>,
+        ctx: Context<RemoveFromBlacklist>,
         address: Pubkey,
     ) -> Result<()> {
         instructions::remove_from_blacklist::handler(ctx, address)
     }
 
-    pub fn seize(ctx: Context<instructions::Seize>, amount: u64) -> Result<()> {
+    pub fn seize(ctx: Context<Seize>, amount: u64) -> Result<()> {
         instructions::seize::handler(ctx, amount)
     }
 }
