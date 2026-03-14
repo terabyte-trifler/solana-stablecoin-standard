@@ -1,6 +1,6 @@
 Streaming transaction logs mentioning 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j. Confirmed commitment
-Transaction executed in slot 77940:
-  Signature: 8JHWpx9v9yMH6KDYaJQ4NpdkhwuuT24hurPfE1EyHCwSmyVvwzNgzTZsX72mK3VeiCHc93dhFjWrmqi1WuULp9w
+Transaction executed in slot 97028:
+  Signature: 5rNCytpcTS6B3Fj4CEVgBaZCxcevsSavCNSn3mTSkR53rQoo576kPZzscL5yCihDNBxeT6NTYdMyRGU7ics6574B
   Status: Ok
   Log Messages:
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
@@ -14,8 +14,8 @@ Transaction executed in slot 77940:
     Program log: Transfer hook ExtraAccountMetaList initialized
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 15251 of 200000 compute units
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
-Transaction executed in slot 77958:
-  Signature: 4wfmfDvmrUiTJrWcf1ga1zaERDk8tFQRnhpcseABkuAvvkMcb37fbhgoCuRRKrkmDmx5BZnpoZnbBKGouXKQaryS
+Transaction executed in slot 97046:
+  Signature: X6tp1TMGaGHXt7iRosrs6pDn3xhj8qXpKMegcYMm8E4qszsjUHW2FAY6raksX2dHsjRVJ58RXLEmHKQ4eDJj4tu
   Status: Ok
   Log Messages:
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
@@ -26,27 +26,27 @@ Transaction executed in slot 77958:
     Program log: Execute instruction - amount: 500000
     Program log: Account count OK: 9
     Program log: Account count OK: 9
-    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
-    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: Mint: DeD818nP8hMYeDcVNjjhSMKkY5o6bgeStmLWzgSihUtN
+    Program log: Authority: Evg6dZRM2nydirtfePcKMzJXLthkznTR2x5Mi1Qei22z
     Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
-    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
-    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
-    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
-    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
-    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Stablecoin Config: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
+    Program log: Source Blacklist: Gs31jDFEgRma1YtskqcY6RhsLaJGQotWgVo2ydjUE6Hk
+    Program log: Dest Blacklist: F9FWSXngxEucVSakmCqwd3oGpnmCZMide2waFkiZMgAD
+    Program log: Expected meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
+    Program log: Actual meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
     Program log: Meta PDA validated
-    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Expected config PDA for bypass: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: Is seize operation (bypass): false
     Program log: Checking blacklists...
     Program log: Source blacklist data_len: 0
     Program log: Dest blacklist data_len: 0
     Program log: ✓ ALLOW: Both parties clear, transfer allowed
-    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28909 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27437 of 176582 compute units
     Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
-    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54605 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 51633 of 200000 compute units
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
-Transaction executed in slot 77963:
-  Signature: 6325LaDsFpa8Qr1FkWSjSHnSzEvtukdd98NsTJ2DDUWV4JLv72bFju2TzZQwbHogw9iTqzwkBEsiWKYPwGxpABrC
+Transaction executed in slot 97051:
+  Signature: 3MidPeMzWvX8UNcoT4zBGHGURrrxzMtmwsFVLuY5p5Mr44yS2ZA7mrjeF7c5TuzbyaCc5oP7QKkgzMDnFMg7tX5t
   Status: Ok
   Log Messages:
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
@@ -57,27 +57,27 @@ Transaction executed in slot 77963:
     Program log: Execute instruction - amount: 100
     Program log: Account count OK: 9
     Program log: Account count OK: 9
-    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
-    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: Mint: DeD818nP8hMYeDcVNjjhSMKkY5o6bgeStmLWzgSihUtN
+    Program log: Authority: Evg6dZRM2nydirtfePcKMzJXLthkznTR2x5Mi1Qei22z
     Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
-    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
-    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
-    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
-    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
-    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Stablecoin Config: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
+    Program log: Source Blacklist: Gs31jDFEgRma1YtskqcY6RhsLaJGQotWgVo2ydjUE6Hk
+    Program log: Dest Blacklist: F9FWSXngxEucVSakmCqwd3oGpnmCZMide2waFkiZMgAD
+    Program log: Expected meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
+    Program log: Actual meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
     Program log: Meta PDA validated
-    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Expected config PDA for bypass: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: Is seize operation (bypass): false
     Program log: Checking blacklists...
     Program log: Source blacklist data_len: 0
     Program log: Dest blacklist data_len: 0
     Program log: ✓ ALLOW: Both parties clear, transfer allowed
-    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28883 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27411 of 176582 compute units
     Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
-    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54579 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 51607 of 200000 compute units
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
-Transaction executed in slot 77966:
-  Signature: 2XSHGMadN78f8qArmu4toRxrpcfKzRiFsE3whGBehg9GeCJJbh7Whm7hAj3UMdNR4NzVqXqeqRhsjpjSUb9KyRSa
+Transaction executed in slot 97054:
+  Signature: aJatquNNB4an8PQEFALrrPrE2oQqHMtp9xfqBB47qckrudZGNN6CRShNQVeR6kh6euHLg75Tw73B29cq8xSru2Z
   Status: Ok
   Log Messages:
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
@@ -92,27 +92,27 @@ Transaction executed in slot 77966:
     Program log: Execute instruction - amount: 2000000
     Program log: Account count OK: 9
     Program log: Account count OK: 9
-    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
-    Program log: Authority: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Mint: DeD818nP8hMYeDcVNjjhSMKkY5o6bgeStmLWzgSihUtN
+    Program log: Authority: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
-    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
-    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
-    Program log: Dest Blacklist: k42xY8buSdNVz4u8ne1e2okxmF1F5fJumAGkkuSAhhU
-    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
-    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Stablecoin Config: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
+    Program log: Source Blacklist: Gs31jDFEgRma1YtskqcY6RhsLaJGQotWgVo2ydjUE6Hk
+    Program log: Dest Blacklist: DavzyVmKgqapM7jbWfkVfDao26npwMcAazF34EkK4fE6
+    Program log: Expected meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
+    Program log: Actual meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
     Program log: Meta PDA validated
-    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Expected config PDA for bypass: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: Is seize operation (bypass): true
     Program log: ✓ BYPASS: Permanent delegate seize operation detected
-    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27804 of 138474 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 26346 of 144474 compute units
     Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
-    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54870 of 164780 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 50412 of 167780 compute units
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
-    Program data: M4GDcs7qjHqB7zJXuPaDJp74EoiDx8Ll7w0XN0CzLqzkwoiU/CCwvvUA6tyM7O0txgieIHjMH4cYvurufieFmITItSpVjoPJuHmjLvjg8tjmjwPxWLAyTWjawateffRgFRkvxFDlvl0nACcPowmyJd5idPIo1bJ/+nWN/gJrmQrSRYVGF9/lwQgAwvgqbSo05KKm8dBOCi7vmmxVUWj10VMxte7RQfvcgIQeAAAAAABzmmoEgdLV2WUrMC7lCCLncLlpGDVSc02lHQajgQzFdBtYtGkAAAAA
-    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 91675 of 200000 compute units
+    Program data: M4GDcs7qjHr6QuZpNyv7dxA/ndwwaNW1QpH/g0HUPJIvjR3mx3v9hrvUcCERn8UPHBmSEVagkkKiqUKfxeWLQ2SXLhYFEyYf4H/jnL4OOF0A7R77HpCdPVdN4v6akNw/iORn7Z4x1RzO5+uNbSfDu+1h/dNFfSvyzCihVHD2fmdPnWAuX/ihL74XjYfvp1uPjkJR4kYgcyGh0epGJi6JTjyzvLqdt9b1gIQeAAAAAABgyqqKCyaYW9ii6Rb8PvCUZ4FvoEWL5jSJyLuVYKPLsauitGkAAAAA
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 84217 of 200000 compute units
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
-Transaction executed in slot 77968:
-  Signature: 1HqBLNFAnDQMYWPWzuVoH8SMwrJYtbTT1dUUcxeEj3EUMGfr3Rp6RsF14jKC4NxnXBRQXZYmEW25EthSrVfzwJJ
+Transaction executed in slot 97056:
+  Signature: 43BYaVP5tUSmwJtDoV3FgabpF6QuCjogcEMxmXqxonMFTFjhVZm6iYUc1R2vHjAzW9XiYf45Bx1KBeTMXcg5gUpX
   Status: Ok
   Log Messages:
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
@@ -127,27 +127,27 @@ Transaction executed in slot 77968:
     Program log: Execute instruction - amount: 100
     Program log: Account count OK: 9
     Program log: Account count OK: 9
-    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
-    Program log: Authority: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Mint: DeD818nP8hMYeDcVNjjhSMKkY5o6bgeStmLWzgSihUtN
+    Program log: Authority: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
-    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
-    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
-    Program log: Dest Blacklist: k42xY8buSdNVz4u8ne1e2okxmF1F5fJumAGkkuSAhhU
-    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
-    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Stablecoin Config: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
+    Program log: Source Blacklist: Gs31jDFEgRma1YtskqcY6RhsLaJGQotWgVo2ydjUE6Hk
+    Program log: Dest Blacklist: DavzyVmKgqapM7jbWfkVfDao26npwMcAazF34EkK4fE6
+    Program log: Expected meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
+    Program log: Actual meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
     Program log: Meta PDA validated
-    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Expected config PDA for bypass: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: Is seize operation (bypass): true
     Program log: ✓ BYPASS: Permanent delegate seize operation detected
-    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27769 of 138472 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 26311 of 144472 compute units
     Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
-    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54835 of 164778 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 50377 of 167778 compute units
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
-    Program data: M4GDcs7qjHqB7zJXuPaDJp74EoiDx8Ll7w0XN0CzLqzkwoiU/CCwvvUA6tyM7O0txgieIHjMH4cYvurufieFmITItSpVjoPJuHmjLvjg8tjmjwPxWLAyTWjawateffRgFRkvxFDlvl0nACcPowmyJd5idPIo1bJ/+nWN/gJrmQrSRYVGF9/lwQgAwvgqbSo05KKm8dBOCi7vmmxVUWj10VMxte7RQfvcZAAAAAAAAAAhDAi/U1+Bik8joJLtkPxk7bB38ug1RSm7iFtxz3x9Kx1YtGkAAAAA
-    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 91642 of 200000 compute units
+    Program data: M4GDcs7qjHr6QuZpNyv7dxA/ndwwaNW1QpH/g0HUPJIvjR3mx3v9hrvUcCERn8UPHBmSEVagkkKiqUKfxeWLQ2SXLhYFEyYf4H/jnL4OOF0A7R77HpCdPVdN4v6akNw/iORn7Z4x1RzO5+uNbSfDu+1h/dNFfSvyzCihVHD2fmdPnWAuX/ihL74XjYfvp1uPjkJR4kYgcyGh0epGJi6JTjyzvLqdt9b1ZAAAAAAAAAAwpE7EVb119O4e1GFrFO6gPw0VfRdo/Vy82tucIKY1ia2itGkAAAAA
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 84184 of 200000 compute units
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
-Transaction executed in slot 77971:
-  Signature: 5pN38HqapxNXxVMSAtXfGLvCv82z9YLppt8tqgPSvVSAcmdUr5pfaPxRj5WsLXtakmUq8dTC5LBxjcSvWWEF4ART
+Transaction executed in slot 97059:
+  Signature: 3ph3aAnVeiX1PBAWXx8vZeibfzJHamAdbGzDJZVb3FLNQ9tsEPEQSbZCsgYedAifXfoKvpuDEgdaAVUPzC8rjgK
   Status: Ok
   Log Messages:
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
@@ -158,27 +158,27 @@ Transaction executed in slot 77971:
     Program log: Execute instruction - amount: 3000000
     Program log: Account count OK: 9
     Program log: Account count OK: 9
-    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
-    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: Mint: DeD818nP8hMYeDcVNjjhSMKkY5o6bgeStmLWzgSihUtN
+    Program log: Authority: Evg6dZRM2nydirtfePcKMzJXLthkznTR2x5Mi1Qei22z
     Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
-    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
-    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
-    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
-    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
-    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Stablecoin Config: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
+    Program log: Source Blacklist: Gs31jDFEgRma1YtskqcY6RhsLaJGQotWgVo2ydjUE6Hk
+    Program log: Dest Blacklist: F9FWSXngxEucVSakmCqwd3oGpnmCZMide2waFkiZMgAD
+    Program log: Expected meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
+    Program log: Actual meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
     Program log: Meta PDA validated
-    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Expected config PDA for bypass: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: Is seize operation (bypass): false
     Program log: Checking blacklists...
     Program log: Source blacklist data_len: 0
     Program log: Dest blacklist data_len: 0
     Program log: ✓ ALLOW: Both parties clear, transfer allowed
-    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28918 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27446 of 176582 compute units
     Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
-    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54614 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 51642 of 200000 compute units
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
-Transaction executed in slot 77973:
-  Signature: T4NS5jzfW57awiHuhMs2UWYmahM27yjV96VpBriNax3NMDPqpaEpCckD5Wcu8P7EtFEZGSfz53sswHhSd7i5XV3
+Transaction executed in slot 97061:
+  Signature: 4UdEuGjtMDsPS4yVCL53mjPQgiMm52K98DR2HeZzfyAXd32nqScME1kcTXUtq5f458TD5Qz1zg3SXTjKZLzPqXCH
   Status: Ok
   Log Messages:
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q invoke [1]
@@ -193,27 +193,27 @@ Transaction executed in slot 77973:
     Program log: Execute instruction - amount: 20499800
     Program log: Account count OK: 9
     Program log: Account count OK: 9
-    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
-    Program log: Authority: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Mint: DeD818nP8hMYeDcVNjjhSMKkY5o6bgeStmLWzgSihUtN
+    Program log: Authority: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
-    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
-    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
-    Program log: Dest Blacklist: k42xY8buSdNVz4u8ne1e2okxmF1F5fJumAGkkuSAhhU
-    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
-    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Stablecoin Config: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
+    Program log: Source Blacklist: Gs31jDFEgRma1YtskqcY6RhsLaJGQotWgVo2ydjUE6Hk
+    Program log: Dest Blacklist: DavzyVmKgqapM7jbWfkVfDao26npwMcAazF34EkK4fE6
+    Program log: Expected meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
+    Program log: Actual meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
     Program log: Meta PDA validated
-    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Expected config PDA for bypass: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: Is seize operation (bypass): true
     Program log: ✓ BYPASS: Permanent delegate seize operation detected
-    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27808 of 138474 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 26350 of 144474 compute units
     Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
-    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54874 of 164780 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 50416 of 167780 compute units
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
-    Program data: M4GDcs7qjHqB7zJXuPaDJp74EoiDx8Ll7w0XN0CzLqzkwoiU/CCwvvUA6tyM7O0txgieIHjMH4cYvurufieFmITItSpVjoPJuHmjLvjg8tjmjwPxWLAyTWjawateffRgFRkvxFDlvl0nACcPowmyJd5idPIo1bJ/+nWN/gJrmQrSRYVGF9/lwQgAwvgqbSo05KKm8dBOCi7vmmxVUWj10VMxte7RQfvcWM04AQAAAABzmmoEgdLV2WUrMC7lCCLncLlpGDVSc02lHQajgQzFdCJYtGkAAAAA
-    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 91679 of 200000 compute units
+    Program data: M4GDcs7qjHr6QuZpNyv7dxA/ndwwaNW1QpH/g0HUPJIvjR3mx3v9hrvUcCERn8UPHBmSEVagkkKiqUKfxeWLQ2SXLhYFEyYf4H/jnL4OOF0A7R77HpCdPVdN4v6akNw/iORn7Z4x1RzO5+uNbSfDu+1h/dNFfSvyzCihVHD2fmdPnWAuX/ihL74XjYfvp1uPjkJR4kYgcyGh0epGJi6JTjyzvLqdt9b1WM04AQAAAABgyqqKCyaYW9ii6Rb8PvCUZ4FvoEWL5jSJyLuVYKPLsbKitGkAAAAA
+    Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q consumed 84221 of 200000 compute units
     Program A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q success
-Transaction executed in slot 77976:
-  Signature: eb49eHjpAHiSppAXAC2qX1eZWfwe7PfGTwrhL1Ri2veHeYLNVmuHFDmUPV5t7bLfWmfvVoQu2yvX4S86DX8qGSG
+Transaction executed in slot 97064:
+  Signature: 2qoQV43ZVQPu4XpAB5wEEHD9TeATZWX6keYnofBQHyuF96DC6ZqbBbXxMinf6wfHcRHaEGZ5HvUUMues29Q3xnTr
   Status: Ok
   Log Messages:
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
@@ -224,22 +224,22 @@ Transaction executed in slot 77976:
     Program log: Execute instruction - amount: 100000
     Program log: Account count OK: 9
     Program log: Account count OK: 9
-    Program log: Mint: HVPhSpKbtqYJWQcvHXjtLPHKmRj8nfRiBCyvBGRWWVHa
-    Program log: Authority: 3dF33GcMgpYHjaQ6RZ3yKLckvnSkxdvox5Y7YDa6q28Q
+    Program log: Mint: DeD818nP8hMYeDcVNjjhSMKkY5o6bgeStmLWzgSihUtN
+    Program log: Authority: Evg6dZRM2nydirtfePcKMzJXLthkznTR2x5Mi1Qei22z
     Program log: SSS Token Program: A5nx6XK7PvhxhyzXNtY5ARGCC1WLymkuLKeBYNg78U4q
-    Program log: Stablecoin Config: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
-    Program log: Source Blacklist: 3Dr2884e3H4Nb4QgiXFRtLBE2wgPCvngKg46LA8MR8AJ
-    Program log: Dest Blacklist: GUTomiQ3ekucmU1okSqphdRezgf24c2PBf7ucauCKr5m
-    Program log: Expected meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
-    Program log: Actual meta PDA: UAkjyXzgBhiVSkkYE4uftCFrduUaWSUmc1vjaoZqj3F
+    Program log: Stablecoin Config: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
+    Program log: Source Blacklist: Gs31jDFEgRma1YtskqcY6RhsLaJGQotWgVo2ydjUE6Hk
+    Program log: Dest Blacklist: F9FWSXngxEucVSakmCqwd3oGpnmCZMide2waFkiZMgAD
+    Program log: Expected meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
+    Program log: Actual meta PDA: 6M7seaqrUZWWJyD8yYyMrdnnznqbxcv4MahqTNkVZ5fS
     Program log: Meta PDA validated
-    Program log: Expected config PDA for bypass: 9kD976LKUcBGBPNupaGBXYp1qbcJMh6WTiHWmF9x7V9X
+    Program log: Expected config PDA for bypass: Hqv6HipEcXUJWvkyC81DzNAg9M6wa9x5jUvk5uVH8Fc9
     Program log: Is seize operation (bypass): false
     Program log: Checking blacklists...
     Program log: Source blacklist data_len: 0
     Program log: Dest blacklist data_len: 0
     Program log: ✓ ALLOW: Both parties clear, transfer allowed
-    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 28909 of 175082 compute units
+    Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j consumed 27437 of 176582 compute units
     Program 8RU51UBAQKVBRiAJCEsEUbq331ruTp7KF61ranWott1j success
-    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 54605 of 200000 compute units
+    Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 51633 of 200000 compute units
     Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
