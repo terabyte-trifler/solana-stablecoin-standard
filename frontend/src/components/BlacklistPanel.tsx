@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import { PublicKey } from "@solana/web3.js";
-import { StablecoinState } from "../hooks/useStablecoin";
+import { StablecoinHookState } from "../hooks/useStablecoin";
 import BN from "bn.js";
 
 interface Props {
-  state: StablecoinState;
+  state: StablecoinHookState;
 }
 
 function shortKey(key: any): string {
@@ -21,7 +21,7 @@ function fmtTimestamp(ts: BN): string {
 }
 
 export const BlacklistPanel: React.FC<Props> = ({ state }) => {
-  const { config, stablecoin, blacklisted } = state;
+  const { config, stablecoin, blacklisted, executeTx, txPending } = state;
 
   // Add to blacklist form
   const [addAddress, setAddAddress] = useState("");
@@ -33,8 +33,11 @@ export const BlacklistPanel: React.FC<Props> = ({ state }) => {
   // Check address
   const [checkAddress, setCheckAddress] = useState("");
   const [checkResult, setCheckResult] = useState<{ checked: boolean; isBlacklisted: boolean; reason?: string } | null>(null);
-  const writeDisabledReason =
-    "Blacklist updates are disabled in this frontend until SDK wallet-adapter signer support lands. Use CLI/backend for compliance writes.";
+
+  // Seize form
+  const [seizeFrom, setSeizeFrom] = useState("");
+  const [seizeTo, setSeizeTo] = useState("");
+  const [seizeAmount, setSeizeAmount] = useState("");
 
   if (!config || !stablecoin) return null;
 
@@ -55,6 +58,48 @@ export const BlacklistPanel: React.FC<Props> = ({ state }) => {
       </div>
     );
   }
+
+  const parseAmount = (str: string): BN => {
+    if (!str.trim()) return new BN(0);
+    if (str.includes(".")) {
+      const [whole, frac] = str.split(".");
+      const padded = (frac || "").padEnd(config.decimals, "0").slice(0, config.decimals);
+      return new BN(`${whole || "0"}${padded}`);
+    }
+    return new BN(str);
+  };
+
+  const handleAdd = async () => {
+    if (!addAddress || !addReason) return;
+    await executeTx(async () =>
+      stablecoin.compliance.blacklistAdd(
+        new PublicKey(addAddress),
+        addReason,
+      ),
+    );
+    setAddAddress("");
+    setAddReason("");
+  };
+
+  const handleRemove = async () => {
+    if (!removeAddress) return;
+    await executeTx(async () =>
+      stablecoin.compliance.blacklistRemove(new PublicKey(removeAddress)),
+    );
+    setRemoveAddress("");
+  };
+
+  const handleSeize = async () => {
+    if (!seizeFrom || !seizeTo || !seizeAmount) return;
+    await executeTx(async () =>
+      stablecoin.compliance.seize({
+        from: new PublicKey(seizeFrom),
+        to: new PublicKey(seizeTo),
+        amount: parseAmount(seizeAmount),
+      }),
+    );
+    setSeizeAmount("");
+  };
 
   const handleCheck = async () => {
     if (!checkAddress) return;
@@ -100,11 +145,10 @@ export const BlacklistPanel: React.FC<Props> = ({ state }) => {
 
           <button
             style={styles.btnDanger}
-            onClick={() => undefined}
-            disabled
-            title={writeDisabledReason}
+            onClick={handleAdd}
+            disabled={txPending}
           >
-            Add via CLI / backend
+            {txPending ? "Processing..." : "Add to Blacklist"}
           </button>
         </div>
 
@@ -152,16 +196,30 @@ export const BlacklistPanel: React.FC<Props> = ({ state }) => {
             />
             <button
               style={styles.btnSecondary}
-              onClick={() => undefined}
-              disabled
-              title={writeDisabledReason}
+              onClick={handleRemove}
+              disabled={txPending}
             >
-              Remove via CLI / backend
+              {txPending ? "Processing..." : "Remove from Blacklist"}
             </button>
           </div>
         </div>
       </div>
-      <div style={styles.notice}>{writeDisabledReason}</div>
+
+      <div style={styles.panel}>
+        <h3 style={styles.panelTitle}>⚖️ Seize Tokens (SSS-2)</h3>
+        <p style={styles.desc}>
+          Transfer tokens via permanent delegate from any source token account to a treasury token account.
+        </p>
+        <label style={styles.label}>Source Token Account</label>
+        <input style={styles.input} value={seizeFrom} onChange={(e) => setSeizeFrom(e.target.value)} placeholder="Source token account..." />
+        <label style={styles.label}>Destination Token Account</label>
+        <input style={styles.input} value={seizeTo} onChange={(e) => setSeizeTo(e.target.value)} placeholder="Treasury token account..." />
+        <label style={styles.label}>Amount ({config.symbol})</label>
+        <input style={styles.input} value={seizeAmount} onChange={(e) => setSeizeAmount(e.target.value)} placeholder="e.g. 10 or 10.5" />
+        <button style={styles.btnDanger} onClick={handleSeize} disabled={txPending}>
+          {txPending ? "Processing..." : "Seize Tokens"}
+        </button>
+      </div>
 
       {/* Blacklist table */}
       <div style={styles.tablePanel}>
@@ -217,5 +275,4 @@ const styles: Record<string, React.CSSProperties> = {
   th: { textAlign: "left", padding: "10px 16px", color: "#64748b", fontSize: 12, fontWeight: 600, borderBottom: "1px solid #334155", textTransform: "uppercase" },
   td: { padding: "10px 16px", fontSize: 13, color: "#e2e8f0", borderBottom: "1px solid #0f172a" },
   disabled: { background: "#1e293b", borderRadius: 12, padding: 40, textAlign: "center" },
-  notice: { background: "#0f2439", border: "1px solid #2a4f70", borderRadius: 10, padding: "10px 12px", color: "#9bc5e8", fontSize: 13 },
 };

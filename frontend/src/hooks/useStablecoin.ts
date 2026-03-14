@@ -1,7 +1,7 @@
 // frontend/src/hooks/useStablecoin.ts
 
 import { useState, useEffect, useCallback } from "react";
-import { useConnection } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import {
   SolanaStablecoin,
@@ -23,8 +23,15 @@ export interface StablecoinState {
   lastTx: string | null;
 }
 
-export function useStablecoin(configPda: string | null) {
+export interface StablecoinHookState extends StablecoinState {
+  load: () => Promise<void>;
+  refresh: () => Promise<void>;
+  executeTx: (fn: () => Promise<string>) => Promise<string>;
+}
+
+export function useStablecoin(configPda: string | null): StablecoinHookState {
   const { connection } = useConnection();
+  const wallet = useWallet();
   const [state, setState] = useState<StablecoinState>({
     stablecoin: null,
     config: null,
@@ -37,6 +44,24 @@ export function useStablecoin(configPda: string | null) {
     lastTx: null,
   });
 
+  const withTimeout = async <T>(promise: Promise<T>, label: string): Promise<T> => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        reject(
+          new Error(
+            `${label} timed out. Check RPC endpoint: ${connection.rpcEndpoint}`
+          )
+        );
+      }, 15000);
+    });
+    try {
+      return await Promise.race([promise, timeout]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  };
+
   // ── Load stablecoin from chain ─────────────────────────────
   const load = useCallback(async () => {
     if (!configPda) return;
@@ -44,12 +69,36 @@ export function useStablecoin(configPda: string | null) {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
       const pda = new PublicKey(configPda);
-      const stable = await SolanaStablecoin.load(connection, pda);
-      const [config, roles, holders] = await Promise.all([
-        stable.getConfig(),
-        stable.getRoles(),
-        stable.getHolders(),
-      ]);
+      const stable = await withTimeout(
+        wallet.publicKey && wallet.signTransaction && wallet.signAllTransactions
+          ? SolanaStablecoin.loadWithWallet(connection, pda, {
+              publicKey: wallet.publicKey,
+              signTransaction: wallet.signTransaction as any,
+              signAllTransactions: wallet.signAllTransactions as any,
+            })
+          : SolanaStablecoin.load(connection, pda),
+        "Loading stablecoin"
+      );
+      const config = await withTimeout(stable.getConfig(), "Fetching stablecoin config");
+
+      const rolesResult = await withTimeout(
+        stable.getRoles().then(
+          (value) => ({ ok: true as const, value }),
+          (error) => ({ ok: false as const, error }),
+        ),
+        "Fetching role manager"
+      );
+
+      const holdersResult = await withTimeout(
+        stable.getHolders().then(
+          (value) => ({ ok: true as const, value }),
+          (error) => ({ ok: false as const, error }),
+        ),
+        "Fetching holders"
+      );
+
+      const roles = rolesResult.ok ? rolesResult.value : null;
+      const holders = holdersResult.ok ? holdersResult.value : [];
 
       let blacklisted: BlacklistEntryAccount[] = [];
       if (stable.isCompliant) {
@@ -58,6 +107,11 @@ export function useStablecoin(configPda: string | null) {
         } catch {}
       }
 
+      const warningMessages = [
+        !rolesResult.ok ? `roles: ${rolesResult.error?.message ?? String(rolesResult.error)}` : null,
+        !holdersResult.ok ? `holders: ${holdersResult.error?.message ?? String(holdersResult.error)}` : null,
+      ].filter(Boolean);
+
       setState({
         stablecoin: stable,
         config,
@@ -65,14 +119,15 @@ export function useStablecoin(configPda: string | null) {
         holders,
         blacklisted,
         loading: false,
-        error: null,
+        error: warningMessages.length > 0 ? `Loaded with partial data (${warningMessages.join("; ")})` : null,
         txPending: false,
         lastTx: null,
       });
     } catch (err: any) {
-      setState((s) => ({ ...s, loading: false, error: err.message }));
+      const reason = err?.message ?? String(err);
+      setState((s) => ({ ...s, loading: false, error: `${reason} (RPC: ${connection.rpcEndpoint})` }));
     }
-  }, [configPda, connection]);
+  }, [configPda, connection, wallet.publicKey, wallet.signAllTransactions, wallet.signTransaction]);
 
   useEffect(() => { load(); }, [load]);
 

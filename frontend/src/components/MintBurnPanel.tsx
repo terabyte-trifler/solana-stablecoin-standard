@@ -1,15 +1,16 @@
 // frontend/src/components/MintBurnPanel.tsx
 
 import React, { useState } from "react";
-import { StablecoinState } from "../hooks/useStablecoin";
+import { PublicKey } from "@solana/web3.js";
+import { StablecoinHookState } from "../hooks/useStablecoin";
 import BN from "bn.js";
 
 interface Props {
-  state: StablecoinState;
+  state: StablecoinHookState;
 }
 
 export const MintBurnPanel: React.FC<Props> = ({ state }) => {
-  const { config, stablecoin } = state;
+  const { config, stablecoin, executeTx, txPending } = state;
 
   // Mint form
   const [mintRecipient, setMintRecipient] = useState("");
@@ -21,8 +22,36 @@ export const MintBurnPanel: React.FC<Props> = ({ state }) => {
   if (!config || !stablecoin) return null;
   const decimals = config.decimals;
 
-  const writeDisabledReason =
-    "Write actions are intentionally disabled in this frontend until SDK wallet-adapter signer support lands. Use CLI/backend for mint and burn.";
+  const parseAmount = (str: string): BN => {
+    if (!str.trim()) return new BN(0);
+    if (str.includes(".")) {
+      const [whole, frac] = str.split(".");
+      const padded = (frac || "").padEnd(decimals, "0").slice(0, decimals);
+      return new BN(`${whole || "0"}${padded}`);
+    }
+    return new BN(str);
+  };
+
+  const handleMint = async () => {
+    if (!mintRecipient || !mintAmount) return;
+    await executeTx(async () =>
+      stablecoin.mintTokens({
+        recipient: new PublicKey(mintRecipient),
+        amount: parseAmount(mintAmount),
+      }),
+    );
+    setMintAmount("");
+  };
+
+  const handleBurn = async () => {
+    if (!burnAmount) return;
+    await executeTx(async () =>
+      stablecoin.burn({
+        amount: parseAmount(burnAmount),
+      }),
+    );
+    setBurnAmount("");
+  };
 
   return (
     <div style={styles.grid}>
@@ -53,11 +82,10 @@ export const MintBurnPanel: React.FC<Props> = ({ state }) => {
 
         <button
           style={config.isPaused ? styles.btnDisabled : styles.btnMint}
-          onClick={() => undefined}
-          disabled
-          title={writeDisabledReason}
+          onClick={handleMint}
+          disabled={txPending || config.isPaused}
         >
-          Mint via CLI / backend
+          {txPending ? "Processing..." : `Mint ${config.symbol}`}
         </button>
       </div>
 
@@ -80,11 +108,10 @@ export const MintBurnPanel: React.FC<Props> = ({ state }) => {
 
         <button
           style={config.isPaused ? styles.btnDisabled : styles.btnBurn}
-          onClick={() => undefined}
-          disabled
-          title={writeDisabledReason}
+          onClick={handleBurn}
+          disabled={txPending || config.isPaused}
         >
-          Burn via CLI / backend
+          {txPending ? "Processing..." : `Burn ${config.symbol}`}
         </button>
       </div>
 
@@ -120,9 +147,6 @@ export const MintBurnPanel: React.FC<Props> = ({ state }) => {
           </table>
         )}
       </div>
-      <div style={styles.notice}>
-        <strong>Read-only write panel:</strong> {writeDisabledReason}
-      </div>
     </div>
   );
 };
@@ -146,5 +170,4 @@ const styles: Record<string, React.CSSProperties> = {
   table: { width: "100%", borderCollapse: "collapse" },
   th: { textAlign: "left", padding: "8px 12px", color: "#64748b", fontSize: 12, fontWeight: 600, borderBottom: "1px solid #334155" },
   td: { padding: "8px 12px", fontSize: 13, color: "#e2e8f0", fontFamily: "monospace", borderBottom: "1px solid #1e293b" },
-  notice: { gridColumn: "1 / -1", background: "#0f2439", border: "1px solid #2a4f70", padding: "10px 12px", borderRadius: 10, color: "#9bc5e8", fontSize: 13 },
 };

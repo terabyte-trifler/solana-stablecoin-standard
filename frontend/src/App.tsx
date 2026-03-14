@@ -12,6 +12,36 @@ import { HoldersPanel } from "./components/HoldersPanel";
 import { BlacklistPanel } from "./components/BlacklistPanel";
 
 type Tab = "dashboard" | "mint" | "holders" | "compliance";
+type UiCluster = "localnet" | "devnet";
+
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; message: string }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, message: "" };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, message: error?.message ?? "Unknown runtime error" };
+  }
+
+  override render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ margin: "40px auto", maxWidth: 760, background: "#3f0f14", border: "1px solid #842029", color: "#ffd5d9", borderRadius: 10, padding: 16 }}>
+          <h3 style={{ marginBottom: 10 }}>Frontend Runtime Error</h3>
+          <p style={{ marginBottom: 10 }}>
+            The UI hit an exception while rendering. Reload after restart; if it persists, capture this message.
+          </p>
+          <code>{this.state.message}</code>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export const App: React.FC = () => {
   const wallet = useWallet();
@@ -24,16 +54,29 @@ export const App: React.FC = () => {
     : connection.rpcEndpoint.includes("mainnet")
       ? "mainnet-beta"
       : "custom";
+  const activeCluster: UiCluster = connection.rpcEndpoint.includes("127.0.0.1")
+    || connection.rpcEndpoint.includes("localhost")
+    ? "localnet"
+    : "devnet";
+  const config = stablecoin.config;
+  const stablecoinInstance = stablecoin.stablecoin;
+  const canRenderPanels = Boolean(config && stablecoinInstance);
+  const activeConfig = config as NonNullable<typeof config>;
+  const activeStablecoin = stablecoinInstance as NonNullable<typeof stablecoinInstance>;
 
   return (
-    <div style={styles.container}>
+    <ErrorBoundary>
+      <div style={styles.container}>
       {/* Header */}
       <header style={styles.header}>
         <div style={styles.headerLeft}>
           <h1 style={styles.logo}>SSS</h1>
           <span style={styles.subtitle}>Solana Stablecoin Standard UI</span>
         </div>
-        <WalletMultiButton />
+        <div style={styles.headerRight}>
+          <ClusterSwitcher activeCluster={activeCluster} />
+          <WalletMultiButton />
+        </div>
       </header>
 
       {/* Connection / Config */}
@@ -49,9 +92,15 @@ export const App: React.FC = () => {
           <div style={styles.spinner} />
           <p style={{ color: "#94a3b8" }}>Loading stablecoin...</p>
         </div>
-      ) : stablecoin.error && !stablecoin.config ? (
+      ) : stablecoin.error && !config ? (
         <div style={styles.center}>
           <p style={{ color: "#ef4444" }}>Error: {stablecoin.error}</p>
+          <button style={styles.btnSecondary} onClick={() => setConfigPda(null)}>Back</button>
+        </div>
+      ) : !canRenderPanels ? (
+        <div style={styles.center}>
+          <p style={{ color: "#94a3b8" }}>Waiting for stablecoin state to load...</p>
+          {stablecoin.error && <p style={{ color: "#ef4444" }}>{stablecoin.error}</p>}
           <button style={styles.btnSecondary} onClick={() => setConfigPda(null)}>Back</button>
         </div>
       ) : (
@@ -59,24 +108,24 @@ export const App: React.FC = () => {
           {/* Status bar */}
           <div style={styles.statusBar}>
             <StatusBadge
-              label={stablecoin.config!.name}
-              value={stablecoin.config!.symbol}
+              label={activeConfig.name}
+              value={activeConfig.symbol}
               color="#22d3ee"
             />
             <StatusBadge
               label="Supply"
-              value={formatAmount(stablecoin.config!.totalSupply, stablecoin.config!.decimals)}
+              value={formatAmount(activeConfig.totalSupply, activeConfig.decimals)}
               color="#22c55e"
             />
             <StatusBadge
               label="Preset"
-              value={stablecoin.stablecoin?.isCompliant ? "SSS-2" : "SSS-1"}
-              color={stablecoin.stablecoin?.isCompliant ? "#a855f7" : "#3b82f6"}
+              value={activeStablecoin.isCompliant ? "SSS-2" : "SSS-1"}
+              color={activeStablecoin.isCompliant ? "#a855f7" : "#3b82f6"}
             />
             <StatusBadge
               label="Status"
-              value={stablecoin.config!.isPaused ? "PAUSED" : "Active"}
-              color={stablecoin.config!.isPaused ? "#ef4444" : "#22c55e"}
+              value={activeConfig.isPaused ? "PAUSED" : "Active"}
+              color={activeConfig.isPaused ? "#ef4444" : "#22c55e"}
             />
             <StatusBadge label="Holders" value={`${stablecoin.holders.length}`} color="#94a3b8" />
             <StatusBadge label="RPC" value={connection.rpcEndpoint.includes("127.0.0.1") ? "Localnet" : explorerCluster} color="#8db2d6" />
@@ -129,7 +178,8 @@ export const App: React.FC = () => {
           </main>
         </>
       )}
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 };
 
@@ -141,6 +191,31 @@ const StatusBadge: React.FC<{ label: string; value: string; color: string }> = (
     <span style={{ color, fontWeight: 700 }}>{value}</span>
   </div>
 );
+
+const ClusterSwitcher: React.FC<{ activeCluster: UiCluster }> = ({ activeCluster }) => {
+  const switchCluster = (cluster: UiCluster) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("cluster", cluster);
+    window.location.href = url.toString();
+  };
+
+  return (
+    <div style={styles.clusterWrap}>
+      <button
+        style={activeCluster === "localnet" ? styles.clusterActive : styles.clusterBtn}
+        onClick={() => switchCluster("localnet")}
+      >
+        Localnet
+      </button>
+      <button
+        style={activeCluster === "devnet" ? styles.clusterActive : styles.clusterBtn}
+        onClick={() => switchCluster("devnet")}
+      >
+        Devnet
+      </button>
+    </div>
+  );
+};
 
 function formatAmount(amount: any, decimals: number): string {
   const str = amount.toString().padStart(decimals + 1, "0");
@@ -155,8 +230,12 @@ const styles: Record<string, React.CSSProperties> = {
   container: { maxWidth: 1240, margin: "0 auto", padding: "0 24px 28px" },
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 0", borderBottom: "1px solid var(--line)" },
   headerLeft: { display: "flex", alignItems: "center", gap: 12 },
+  headerRight: { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "flex-end" },
   logo: { fontSize: 30, fontWeight: 800, color: "var(--cyan)", letterSpacing: -1 },
   subtitle: { color: "var(--muted)", fontSize: 14 },
+  clusterWrap: { display: "flex", gap: 6, background: "#0d2034", padding: 6, borderRadius: 999, border: "1px solid #2d5272" },
+  clusterBtn: { padding: "8px 14px", background: "transparent", color: "#9bc5e8", border: "none", borderRadius: 999, cursor: "pointer", fontWeight: 600, fontSize: 13 },
+  clusterActive: { padding: "8px 14px", background: "#173555", color: "#e6f7ff", border: "1px solid #2fd5ff", borderRadius: 999, cursor: "pointer", fontWeight: 700, fontSize: 13 },
   center: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 400, gap: 16 },
   statusBar: { display: "flex", gap: 12, padding: "16px 0", borderBottom: "1px solid var(--line)", flexWrap: "wrap" },
   badge: { display: "flex", flexDirection: "column", gap: 2, background: "var(--card)", padding: "8px 16px", borderRadius: 10, border: "1px solid var(--line)" },
