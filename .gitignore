@@ -3,7 +3,15 @@ test-ledger/
 node_modules/
 cli/dist/
 sdk/dist/
+backend/dist/
+frontend/dist/
 tui/dist/
+tui/.turbo/
 tui/node_modules/
-*.DS_Store
+.DS_Store
+**/.DS_Store
+.env
+.env.*
+!.env.example
+backend/.env
 decode-owners.js
